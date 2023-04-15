@@ -322,15 +322,15 @@ if (!doNotTrack) {
       <h1>详解Excel读取方式</h1>
       <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<pre tabindex="0"><code>string path=&#34;&#34;//这里定义了excel文件的文件位置
-string key= &#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; + path + &#34;;Extended Properties=&#39;Excel 8.0;HDR=NO;IMEX=1&#39;;&#34;; 
-OledbConnection connection =new OledbConnection(key);
-connection.Open();
-string sql=&#34;select * from [sheet1$]&#34;;
-OledbDataAdapter adapter=new OledbDataAdapter(sql,connection);
-DataSet tempDataSet=new DataSet();
-adapter.Fill(tempDataSet);
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c#" data-lang="c#"><span style="display:flex;"><span><span style="color:#66d9ef">string</span> path=<span style="color:#e6db74">&#34;&#34;</span><span style="color:#75715e">//这里定义了excel文件的文件位置</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> key= <span style="color:#e6db74">&#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34;</span> + path + <span style="color:#e6db74">&#34;;Extended Properties=&#39;Excel 8.0;HDR=NO;IMEX=1&#39;;&#34;</span>; 
+</span></span><span style="display:flex;"><span>OledbConnection connection =<span style="color:#66d9ef">new</span> OledbConnection(key);
+</span></span><span style="display:flex;"><span>connection.Open();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> sql=<span style="color:#e6db74">&#34;select * from [sheet1$]&#34;</span>;
+</span></span><span style="display:flex;"><span>OledbDataAdapter adapter=<span style="color:#66d9ef">new</span> OledbDataAdapter(sql,connection);
+</span></span><span style="display:flex;"><span>DataSet tempDataSet=<span style="color:#66d9ef">new</span> DataSet();
+</span></span><span style="display:flex;"><span>adapter.Fill(tempDataSet);
+</span></span></code></pre></div><ul>
 <li>
 <p>首先，在c#中数据表是这样子的，c#中有DataSet和DataTable两个关键字，然后我们可以理解DataSet是一类数据表的集合，他是在内存中的虚拟表的集合；DataTable是一种在内存中的虚拟表，他可以存储任何表的数据。。。这么说好抽象，其实可以这样子理解，DataTable是一张a4纸，然后a4纸上画着表格存着很多数据，DataSet就是一沓a4纸啦！！！！<!-- raw HTML omitted --></p>
 </li>
@@ -338,15 +338,15 @@ adapter.Fill(tempDataSet);
 <p>前情已经讲述完成，oledb，是一种数据库的方式，其实oledb是早期odbc连接方式的加强版，微软设计出这种应用程序接口是为了连接关系型数据库和非关系型数据库还有其他的奇怪的数据库，说白了是为了隔离每种数据库操作的差异，在我用过的连接比如说sql server和access数据库来说，都是先通过一串字符串来定义一个连接，就是我上面写的那个string类型的key，具体如下：</p>
 </li>
 </ul>
-<pre tabindex="0"><code>/连接Sql Server
-string key=&#34;PROVIDER=SQLOLEDB;DATA SOURCE=servername;UID=xyz;PWD=xxx;DATABASE=dbname&#34;
-//连接 Microsoft Access
-string key= &#34;PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=d:\abc\defg.mdb&#34;
-//连接 Microsoft Excel 07版本及老版本
-string key=&#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; + Path + &#34;;&#34; + &#34;Extended Properties=\&#34;Excel 12.0;HDR=NO;IMEX=1;\&#34;&#34;
-//连接 Microsoft Excel 07版本及新版本
-string key=&#34;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&#34; + strExcelPath + &#34;;&#34; + &#34;Extended Properties=\&#34;Excel 8.0;HDR=NO;IMEX=1;\&#34;&#34;
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c#" data-lang="c#"><span style="display:flex;"><span>/<span style="color:#960050;background-color:#1e0010">连接</span>Sql Server
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> key=<span style="color:#e6db74">&#34;PROVIDER=SQLOLEDB;DATA SOURCE=servername;UID=xyz;PWD=xxx;DATABASE=dbname&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//连接 Microsoft Access</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> key= <span style="color:#e6db74">&#34;PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=d:\abc\defg.mdb&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//连接 Microsoft Excel 07版本及老版本</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> key=<span style="color:#e6db74">&#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34;</span> + Path + <span style="color:#e6db74">&#34;;&#34;</span> + <span style="color:#e6db74">&#34;Extended Properties=\&#34;Excel 12.0;HDR=NO;IMEX=1;\&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//连接 Microsoft Excel 07版本及新版本</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> key=<span style="color:#e6db74">&#34;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&#34;</span> + strExcelPath + <span style="color:#e6db74">&#34;;&#34;</span> + <span style="color:#e6db74">&#34;Extended Properties=\&#34;Excel 8.0;HDR=NO;IMEX=1;\&#34;&#34;</span>
+</span></span></code></pre></div><ul>
 <li>这些key中间一个空格都不能乱加的！！！！！，要不然根本读不出来！！！！！</li>
 <li>接下来就是正常套路啦，首先通过OledbConnection声明一个基于key的链接connection,然后打开连接，定义一个sql，把操作放进去，然后通过适配器（OledbAdapter）进行操作，然后通过adapter的fill方法，将得到的数据放到内存中的DataSet就行了，完美！！！内存中就好操作了！！
 其实这个东西可以理解为电脑电源，不一样的key就好像国标220v和港版110v，我们通过适配器的电源头怼上插座，然后通过sql语言也就是整流线圈把交流电整成直流电，然后再把直流电输出主板等等地方也就是dataset！！！</li>
