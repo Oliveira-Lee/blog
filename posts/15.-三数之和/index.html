@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        15. 三数之和
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/15.-%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="15. 三数之和"/>
+<meta name="twitter:description" content="这道题的链接: 15. 三数之和
+这道题刚一看到，首先想到的肯定是暴力法。。。如果在面对面试官写暴力法，估计就完犊子了，在这里的话，我刚开始想到的是深度优先，但是感觉怪怪的，不过我偷偷看了题解以后，发现可以用双指针来解决这个问题，因为我们可以换个思路，比如首先利用Java的api排个序，然后我们固定一个数，剩下的所有数我们就可以转化成双指针的问题来解决，具体来说就是
+首先从左往右固定一个数A，当然我们要考虑去重问题（需要添加一个去重操作），如果这个数大于零，那就完犊子，直接return 如果这个数A小于零，那么我们就利用双指针，从数A的右边第一个数B和最后一个数C之间的所有数抽取出来做成一个新数列，然后我们从两边一直判断并计算是否B&#43;C=-A，如果存在，就存到List中，一直迭代下去，就可以完成了！！！！ class Solution { public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) { Arrays.sort(nums); List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;(); for(int k = 0; k &lt; nums.length - 2; k&#43;&#43;) { if(nums[k] &gt; 0) { break; } if(k &gt; 0 &amp;&amp; nums[k] == nums[k-1]){ continue; } int i = k &#43; 1, j = nums.length - 1; while(i &lt; j) { int sum = nums[k] &#43; nums[i] &#43; nums[j]; if(sum &lt; 0) { while(i &lt; j &amp;&amp; nums[i] == nums[&#43;&#43;i]); } else if (sum &gt; 0){ while(i &lt; j &amp;&amp; nums[j] == nums[--j]); } else { res."/>
+
+
+
+  
+  <meta property="og:title" content="15. 三数之和" />
+<meta property="og:description" content="这道题的链接: 15. 三数之和
+这道题刚一看到，首先想到的肯定是暴力法。。。如果在面对面试官写暴力法，估计就完犊子了，在这里的话，我刚开始想到的是深度优先，但是感觉怪怪的，不过我偷偷看了题解以后，发现可以用双指针来解决这个问题，因为我们可以换个思路，比如首先利用Java的api排个序，然后我们固定一个数，剩下的所有数我们就可以转化成双指针的问题来解决，具体来说就是
+首先从左往右固定一个数A，当然我们要考虑去重问题（需要添加一个去重操作），如果这个数大于零，那就完犊子，直接return 如果这个数A小于零，那么我们就利用双指针，从数A的右边第一个数B和最后一个数C之间的所有数抽取出来做成一个新数列，然后我们从两边一直判断并计算是否B&#43;C=-A，如果存在，就存到List中，一直迭代下去，就可以完成了！！！！ class Solution { public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) { Arrays.sort(nums); List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;(); for(int k = 0; k &lt; nums.length - 2; k&#43;&#43;) { if(nums[k] &gt; 0) { break; } if(k &gt; 0 &amp;&amp; nums[k] == nums[k-1]){ continue; } int i = k &#43; 1, j = nums.length - 1; while(i &lt; j) { int sum = nums[k] &#43; nums[i] &#43; nums[j]; if(sum &lt; 0) { while(i &lt; j &amp;&amp; nums[i] == nums[&#43;&#43;i]); } else if (sum &gt; 0){ while(i &lt; j &amp;&amp; nums[j] == nums[--j]); } else { res." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/15.-%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-12-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-23T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "15. 三数之和",
+        "headline": "15. 三数之和",
+        "alternativeHeadline": "",
+        "description": "
+      
+        这道题的链接: 15. 三数之和\n这道题刚一看到，首先想到的肯定是暴力法。。。如果在面对面试官写暴力法，估计就完犊子了，在这里的话，我刚开始想到的是深度优先，但是感觉怪怪的，不过我偷偷看了题解以后，发现可以用双指针来解决这个问题，因为我们可以换个思路，比如首先利用Java的api排个序，然后我们固定一个数，剩下的所有数我们就可以转化成双指针的问题来解决，具体来说就是\n首先从左往右固定一个数A，当然我们要考虑去重问题（需要添加一个去重操作），如果这个数大于零，那就完犊子，直接return 如果这个数A小于零，那么我们就利用双指针，从数A的右边第一个数B和最后一个数C之间的所有数抽取出来做成一个新数列，然后我们从两边一直判断并计算是否B\u002bC=-A，如果存在，就存到List中，一直迭代下去，就可以完成了！！！！ class Solution { public List\u0026lt;List\u0026lt;Integer\u0026gt;\u0026gt; threeSum(int[] nums) { Arrays.sort(nums); List\u0026lt;List\u0026lt;Integer\u0026gt;\u0026gt; res = new ArrayList\u0026lt;\u0026gt;(); for(int k = 0; k \u0026lt; nums.length - 2; k\u002b\u002b) { if(nums[k] \u0026gt; 0) { break; } if(k \u0026gt; 0 \u0026amp;\u0026amp; nums[k] == nums[k-1]){ continue; } int i = k \u002b 1, j = nums.length - 1; while(i \u0026lt; j) { int sum = nums[k] \u002b nums[i] \u002b nums[j]; if(sum \u0026lt; 0) { while(i \u0026lt; j \u0026amp;\u0026amp; nums[i] == nums[\u002b\u002bi]); } else if (sum \u0026gt; 0){ while(i \u0026lt; j \u0026amp;\u0026amp; nums[j] == nums[--j]); } else { res.
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/15.-%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-12-23T00:00:00.00Z",
+        "datePublished": "2021-12-23T00:00:00.00Z",
+        "dateModified": "2021-12-23T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/15.-%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C\/",
+        "wordCount" : "139",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>15. 三数之和</h1>
+      <p>这道题的链接: <a href="https://leetcode-cn.com/problems/3sum/">15. 三数之和</a><br>
+这道题刚一看到，首先想到的肯定是暴力法。。。如果在面对面试官写暴力法，估计就完犊子了，在这里的话，我刚开始想到的是深度优先，但是感觉怪怪的，不过我偷偷看了题解以后，发现可以用双指针来解决这个问题，因为我们可以换个思路，比如首先利用Java的api排个序，然后我们固定一个数，剩下的所有数我们就可以转化成双指针的问题来解决，具体来说就是</p>
+<ol>
+<li>首先从左往右固定一个数A，当然我们要考虑去重问题（需要添加一个去重操作），如果这个数大于零，那就完犊子，直接return</li>
+<li>如果这个数A小于零，那么我们就利用双指针，从数A的右边第一个数B和最后一个数C之间的所有数抽取出来做成一个新数列，然后我们从两边一直判断并计算是否B+C=-A，如果存在，就存到List中，一直迭代下去，就可以完成了！！！！</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Java" data-lang="Java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">threeSum</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">sort</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> k <span style="color:#f92672">&lt;</span> nums<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">;</span> k<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>k<span style="color:#f92672">]</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>k <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>k<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums<span style="color:#f92672">[</span>k<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]){</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> k <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> j <span style="color:#f92672">=</span> nums<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> nums<span style="color:#f92672">[</span>k<span style="color:#f92672">]</span> <span style="color:#f92672">+</span> nums<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">+</span> nums<span style="color:#f92672">[</span>j<span style="color:#f92672">];</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>sum <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums<span style="color:#f92672">[++</span>i<span style="color:#f92672">]);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sum <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                   <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>j<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums<span style="color:#f92672">[--</span>j<span style="color:#f92672">]);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                   res<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;(</span>Array<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>k<span style="color:#f92672">],</span>nums<span style="color:#f92672">[</span>i<span style="color:#f92672">],</span>nums<span style="color:#f92672">[</span>j<span style="color:#f92672">])));</span>
+</span></span><span style="display:flex;"><span>                   <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums<span style="color:#f92672">[++</span>i<span style="color:#f92672">]);</span>
+</span></span><span style="display:flex;"><span>                   <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>j<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums<span style="color:#f92672">[--</span>j<span style="color:#f92672">]);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>在这里要注意一下，这个简写,可能不好太理解，这里的话就是我们可以这样子理解，&amp;&amp;按照编程原理来说肯定是先看左边为true再看右边，所以注意右边这里是先自增再赋给i，注意哟，最巧的是这里是个while循环，当条件为true的时候，计算循环体里的内容，但是这里没有循环体，所以我们这里就会再次进行while中的判断，我这里想了好久才想通的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Java" data-lang="Java"><span style="display:flex;"><span> <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums<span style="color:#f92672">[++</span>i<span style="color:#f92672">]);</span>
+</span></span></code></pre></div><p>也就是说，这里这个循环等价于</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Java" data-lang="Java"><span style="display:flex;"><span><span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> j <span style="color:#f92672">&amp;&amp;</span> nums<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> nums <span style="color:#f92672">[</span>i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]){</span>
+</span></span><span style="display:flex;"><span>    i<span style="color:#f92672">++;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>换句话说，。这里就是一种去重的功效。</p>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

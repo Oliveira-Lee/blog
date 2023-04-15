@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        如何理解抽象类和接口
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%954/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="如何理解抽象类和接口"/>
+<meta name="twitter:description" content="抽象类的话，他肯定符合Java中类的定义，他不能多继承，只能单继承，而接口可以多实现，抽象类可以被任意权限修饰符public，private，protected以及默认，abstract等属性修饰，并且抽象类中可以有抽象方法，也可以有非抽象方法。but接口的修饰符只能被Public 或者friendly和abstracted修饰，而且接口中的成员变量的话只能是public static final的，其他类型的会报错，，并且成员变量必须赋初值，不然通不过编译；方法必须是public abstracted 从另一个方面来说，抽象类的抽象形式是对属性和行为进行抽象，而接口是对行为进行抽象 再从设计的角度来说的话，抽象类设计的目的就是自下而上，子类需要所以我设计抽象类，继承抽象类就是为了实现这个类属性和行为，或者说从子类中发现公共的部分，然后泛化为抽象类，子类继承父类即可；接口的设计就是自上而下，接口的目的就是规范了一类行为，某个类需要这类行为我就继承这个接口，或者说抽象类体现的是一种继承关系，比如男人女人可以抽象成一个感情抽象类，因为男女都有感情嘛；而接口只是定义了一类规则，but他不要求接口的实现和接口本质上一致，男人和狗子都会有求偶的行为，我们不能把男人和狗算成一个父类。(单身狗不算哈，，，，呜呜呜) 还有个经常问的进阶问题，抽象类中必须要有抽象方法才行嘛，答案肯定是不一定要有抽象方法，比如只有一个静态方法，也不会报错的；而且抽象类不能被final修饰，因为被final修饰的类就不能被继承了，那就没啥意义了，所以在idea中会报错。"/>
+
+
+
+  
+  <meta property="og:title" content="如何理解抽象类和接口" />
+<meta property="og:description" content="抽象类的话，他肯定符合Java中类的定义，他不能多继承，只能单继承，而接口可以多实现，抽象类可以被任意权限修饰符public，private，protected以及默认，abstract等属性修饰，并且抽象类中可以有抽象方法，也可以有非抽象方法。but接口的修饰符只能被Public 或者friendly和abstracted修饰，而且接口中的成员变量的话只能是public static final的，其他类型的会报错，，并且成员变量必须赋初值，不然通不过编译；方法必须是public abstracted 从另一个方面来说，抽象类的抽象形式是对属性和行为进行抽象，而接口是对行为进行抽象 再从设计的角度来说的话，抽象类设计的目的就是自下而上，子类需要所以我设计抽象类，继承抽象类就是为了实现这个类属性和行为，或者说从子类中发现公共的部分，然后泛化为抽象类，子类继承父类即可；接口的设计就是自上而下，接口的目的就是规范了一类行为，某个类需要这类行为我就继承这个接口，或者说抽象类体现的是一种继承关系，比如男人女人可以抽象成一个感情抽象类，因为男女都有感情嘛；而接口只是定义了一类规则，but他不要求接口的实现和接口本质上一致，男人和狗子都会有求偶的行为，我们不能把男人和狗算成一个父类。(单身狗不算哈，，，，呜呜呜) 还有个经常问的进阶问题，抽象类中必须要有抽象方法才行嘛，答案肯定是不一定要有抽象方法，比如只有一个静态方法，也不会报错的；而且抽象类不能被final修饰，因为被final修饰的类就不能被继承了，那就没啥意义了，所以在idea中会报错。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%954/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-22T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-10-22T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "如何理解抽象类和接口",
+        "headline": "如何理解抽象类和接口",
+        "alternativeHeadline": "",
+        "description": "
+      
+        抽象类的话，他肯定符合Java中类的定义，他不能多继承，只能单继承，而接口可以多实现，抽象类可以被任意权限修饰符public，private，protected以及默认，abstract等属性修饰，并且抽象类中可以有抽象方法，也可以有非抽象方法。but接口的修饰符只能被Public 或者friendly和abstracted修饰，而且接口中的成员变量的话只能是public static final的，其他类型的会报错，，并且成员变量必须赋初值，不然通不过编译；方法必须是public abstracted 从另一个方面来说，抽象类的抽象形式是对属性和行为进行抽象，而接口是对行为进行抽象 再从设计的角度来说的话，抽象类设计的目的就是自下而上，子类需要所以我设计抽象类，继承抽象类就是为了实现这个类属性和行为，或者说从子类中发现公共的部分，然后泛化为抽象类，子类继承父类即可；接口的设计就是自上而下，接口的目的就是规范了一类行为，某个类需要这类行为我就继承这个接口，或者说抽象类体现的是一种继承关系，比如男人女人可以抽象成一个感情抽象类，因为男女都有感情嘛；而接口只是定义了一类规则，but他不要求接口的实现和接口本质上一致，男人和狗子都会有求偶的行为，我们不能把男人和狗算成一个父类。(单身狗不算哈，，，，呜呜呜) 还有个经常问的进阶问题，抽象类中必须要有抽象方法才行嘛，答案肯定是不一定要有抽象方法，比如只有一个静态方法，也不会报错的；而且抽象类不能被final修饰，因为被final修饰的类就不能被继承了，那就没啥意义了，所以在idea中会报错。
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%954\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-10-22T00:00:00.00Z",
+        "datePublished": "2021-10-22T00:00:00.00Z",
+        "dateModified": "2021-10-22T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%954\/",
+        "wordCount" : "8",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>如何理解抽象类和接口</h1>
+      <p>抽象类的话，他肯定符合Java中类的定义，他不能多继承，只能单继承，而接口可以多实现，抽象类可以被任意权限修饰符public，private，protected以及默认，abstract等属性修饰，并且抽象类中可以有抽象方法，也可以有非抽象方法。but接口的修饰符只能被Public 或者friendly和abstracted修饰，而且接口中的成员变量的话只能是public static final的，其他类型的会报错，，并且成员变量必须赋初值，不然通不过编译；方法必须是public abstracted<!-- raw HTML omitted -->
+从另一个方面来说，抽象类的抽象形式是对属性和行为进行抽象，而接口是对行为进行抽象<!-- raw HTML omitted -->
+再从设计的角度来说的话，抽象类设计的目的就是自下而上，子类需要所以我设计抽象类，继承抽象类就是为了实现这个类属性和行为，或者说从子类中发现公共的部分，然后泛化为抽象类，子类继承父类即可；接口的设计就是自上而下，接口的目的就是规范了一类行为，某个类需要这类行为我就继承这个接口，或者说抽象类体现的是一种继承关系，比如男人女人可以抽象成一个感情抽象类，因为男女都有感情嘛；而接口只是定义了一类规则，but他不要求接口的实现和接口本质上一致，男人和狗子都会有求偶的行为，我们不能把男人和狗算成一个父类。(单身狗不算哈，，，，呜呜呜)<!-- raw HTML omitted -->
+还有个经常问的进阶问题，抽象类中必须要有抽象方法才行嘛，答案肯定是不一定要有抽象方法，比如只有一个静态方法，也不会报错的；而且抽象类不能被final修饰，因为被final修饰的类就不能被继承了，那就没啥意义了，所以在idea中会报错。</p>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

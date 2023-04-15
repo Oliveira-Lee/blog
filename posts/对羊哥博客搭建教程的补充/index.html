@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        对羊哥博客搭建教程的补充
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%AF%B9%E7%BE%8A%E5%93%A5%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B%E7%9A%84%E8%A1%A5%E5%85%85/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="对羊哥博客搭建教程的补充"/>
+<meta name="twitter:description" content="链接：羊哥博客搭建教程 实话说，在羊哥搭建博客教学视频中，他的教程已经很详细的了，在mac下都能按照他的情况搭建出来，但是有一个部分值得注意，就是有关于头像图片和其他图片无法显示的问题。我为了解决这个问题，查阅了百度上的很多资料，踩了很多坑，总结出一个方法仅供参考。 在我的理解中，博客网页上所有的图片等资源都存在source文件夹内，其中source/_posts在创建时就存在，主要是存储md格式的博客文字。所以我们可以在source文件中新建一个文件夹来存储图片，我在这里将其命名为img，在其中添加两个图片，Alipay（支付宝二维码）和Head（头像），接下来在_config.yml文件中配置这两个图片（注意在这里的_config.yml是themes主题中的某个主题的配置文件，而不是hexo框架的配置文件）
+# 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg alipay: /img/Alipay.jpeg #你的头像url avatar: /img/Head.JPG "/>
+
+
+
+  
+  <meta property="og:title" content="对羊哥博客搭建教程的补充" />
+<meta property="og:description" content="链接：羊哥博客搭建教程 实话说，在羊哥搭建博客教学视频中，他的教程已经很详细的了，在mac下都能按照他的情况搭建出来，但是有一个部分值得注意，就是有关于头像图片和其他图片无法显示的问题。我为了解决这个问题，查阅了百度上的很多资料，踩了很多坑，总结出一个方法仅供参考。 在我的理解中，博客网页上所有的图片等资源都存在source文件夹内，其中source/_posts在创建时就存在，主要是存储md格式的博客文字。所以我们可以在source文件中新建一个文件夹来存储图片，我在这里将其命名为img，在其中添加两个图片，Alipay（支付宝二维码）和Head（头像），接下来在_config.yml文件中配置这两个图片（注意在这里的_config.yml是themes主题中的某个主题的配置文件，而不是hexo框架的配置文件）
+# 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg alipay: /img/Alipay.jpeg #你的头像url avatar: /img/Head.JPG " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%AF%B9%E7%BE%8A%E5%93%A5%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B%E7%9A%84%E8%A1%A5%E5%85%85/" /><meta property="article:section" content="posts" />
+
+<meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "对羊哥博客搭建教程的补充",
+        "headline": "对羊哥博客搭建教程的补充",
+        "alternativeHeadline": "",
+        "description": "
+      
+        链接：羊哥博客搭建教程 实话说，在羊哥搭建博客教学视频中，他的教程已经很详细的了，在mac下都能按照他的情况搭建出来，但是有一个部分值得注意，就是有关于头像图片和其他图片无法显示的问题。我为了解决这个问题，查阅了百度上的很多资料，踩了很多坑，总结出一个方法仅供参考。 在我的理解中，博客网页上所有的图片等资源都存在source文件夹内，其中source\/_posts在创建时就存在，主要是存储md格式的博客文字。所以我们可以在source文件中新建一个文件夹来存储图片，我在这里将其命名为img，在其中添加两个图片，Alipay（支付宝二维码）和Head（头像），接下来在_config.yml文件中配置这两个图片（注意在这里的_config.yml是themes主题中的某个主题的配置文件，而不是hexo框架的配置文件）\n# 支付宝二维码图片地址，跟你设置头像的方式一样。比如：\/assets\/img\/alipay.jpg alipay: \/img\/Alipay.jpeg #你的头像url avatar: \/img\/Head.JPG 
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%AF%B9%E7%BE%8A%E5%93%A5%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B%E7%9A%84%E8%A1%A5%E5%85%85\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "0001",
+        "dateCreated": "0001-01-01T00:00:00.00Z",
+        "datePublished": "0001-01-01T00:00:00.00Z",
+        "dateModified": "0001-01-01T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%AF%B9%E7%BE%8A%E5%93%A5%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B%E7%9A%84%E8%A1%A5%E5%85%85\/",
+        "wordCount" : "10",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>对羊哥博客搭建教程的补充</h1>
+      <p>链接：<a href="https://www.bilibili.com/video/av44544186?from=search&amp;seid=8260304926588486728/">羊哥博客搭建教程</a><!-- raw HTML omitted -->
+实话说，在羊哥搭建博客教学视频中，他的教程已经很详细的了，在mac下都能按照他的情况搭建出来，但是有一个部分值得注意，就是有关于头像图片和其他图片无法显示的问题。我为了解决这个问题，查阅了百度上的很多资料，踩了很多坑，总结出一个方法仅供参考。<!-- raw HTML omitted -->
+在我的理解中，博客网页上所有的图片等资源都存在source文件夹内，其中source/_posts在创建时就存在，主要是存储md格式的博客文字。所以我们可以在source文件中新建一个文件夹来存储图片，我在这里将其命名为img，在其中添加两个图片，Alipay（支付宝二维码）和Head（头像），接下来在_config.yml文件中配置这两个图片（注意在这里的_config.yml是themes主题中的某个主题的配置文件，而不是hexo框架的配置文件）<!-- raw HTML omitted --></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e"># 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>alipay: <span style="color:#f92672">/</span>img<span style="color:#f92672">/</span>Alipay.jpeg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#你的头像url
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>avatar: <span style="color:#f92672">/</span>img<span style="color:#f92672">/</span>Head.JPG
+</span></span></code></pre></div></div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

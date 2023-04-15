@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        详解Excel读取方式
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E8%AF%A6%E8%A7%A3excel%E8%AF%BB%E5%8F%96%E6%96%B9%E5%BC%8F/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="详解Excel读取方式"/>
+<meta name="twitter:description" content="string path=&#34;&#34;//这里定义了excel文件的文件位置 string key= &#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; &#43; path &#43; &#34;;Extended Properties=&#39;Excel 8.0;HDR=NO;IMEX=1&#39;;&#34;; OledbConnection connection =new OledbConnection(key); connection.Open(); string sql=&#34;select * from [sheet1$]&#34;; OledbDataAdapter adapter=new OledbDataAdapter(sql,connection); DataSet tempDataSet=new DataSet(); adapter.Fill(tempDataSet); 首先，在c#中数据表是这样子的，c#中有DataSet和DataTable两个关键字，然后我们可以理解DataSet是一类数据表的集合，他是在内存中的虚拟表的集合；DataTable是一种在内存中的虚拟表，他可以存储任何表的数据。。。这么说好抽象，其实可以这样子理解，DataTable是一张a4纸，然后a4纸上画着表格存着很多数据，DataSet就是一沓a4纸啦！！！！
+前情已经讲述完成，oledb，是一种数据库的方式，其实oledb是早期odbc连接方式的加强版，微软设计出这种应用程序接口是为了连接关系型数据库和非关系型数据库还有其他的奇怪的数据库，说白了是为了隔离每种数据库操作的差异，在我用过的连接比如说sql server和access数据库来说，都是先通过一串字符串来定义一个连接，就是我上面写的那个string类型的key，具体如下：
+/连接Sql Server string key=&#34;PROVIDER=SQLOLEDB;DATA SOURCE=servername;UID=xyz;PWD=xxx;DATABASE=dbname&#34; //连接 Microsoft Access string key= &#34;PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=d:\abc\defg.mdb&#34; //连接 Microsoft Excel 07版本及老版本 string key=&#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; &#43; Path &#43; &#34;;&#34; &#43; &#34;Extended Properties=\&#34;Excel 12.0;HDR=NO;IMEX=1;\&#34;&#34; //连接 Microsoft Excel 07版本及新版本 string key=&#34;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&#34; &#43; strExcelPath &#43; &#34;;&#34; &#43; &#34;Extended Properties=\&#34;Excel 8."/>
+
+
+
+  
+  <meta property="og:title" content="详解Excel读取方式" />
+<meta property="og:description" content="string path=&#34;&#34;//这里定义了excel文件的文件位置 string key= &#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; &#43; path &#43; &#34;;Extended Properties=&#39;Excel 8.0;HDR=NO;IMEX=1&#39;;&#34;; OledbConnection connection =new OledbConnection(key); connection.Open(); string sql=&#34;select * from [sheet1$]&#34;; OledbDataAdapter adapter=new OledbDataAdapter(sql,connection); DataSet tempDataSet=new DataSet(); adapter.Fill(tempDataSet); 首先，在c#中数据表是这样子的，c#中有DataSet和DataTable两个关键字，然后我们可以理解DataSet是一类数据表的集合，他是在内存中的虚拟表的集合；DataTable是一种在内存中的虚拟表，他可以存储任何表的数据。。。这么说好抽象，其实可以这样子理解，DataTable是一张a4纸，然后a4纸上画着表格存着很多数据，DataSet就是一沓a4纸啦！！！！
+前情已经讲述完成，oledb，是一种数据库的方式，其实oledb是早期odbc连接方式的加强版，微软设计出这种应用程序接口是为了连接关系型数据库和非关系型数据库还有其他的奇怪的数据库，说白了是为了隔离每种数据库操作的差异，在我用过的连接比如说sql server和access数据库来说，都是先通过一串字符串来定义一个连接，就是我上面写的那个string类型的key，具体如下：
+/连接Sql Server string key=&#34;PROVIDER=SQLOLEDB;DATA SOURCE=servername;UID=xyz;PWD=xxx;DATABASE=dbname&#34; //连接 Microsoft Access string key= &#34;PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=d:\abc\defg.mdb&#34; //连接 Microsoft Excel 07版本及老版本 string key=&#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; &#43; Path &#43; &#34;;&#34; &#43; &#34;Extended Properties=\&#34;Excel 12.0;HDR=NO;IMEX=1;\&#34;&#34; //连接 Microsoft Excel 07版本及新版本 string key=&#34;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&#34; &#43; strExcelPath &#43; &#34;;&#34; &#43; &#34;Extended Properties=\&#34;Excel 8." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E8%AF%A6%E8%A7%A3excel%E8%AF%BB%E5%8F%96%E6%96%B9%E5%BC%8F/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-06-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-06-08T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "详解Excel读取方式",
+        "headline": "详解Excel读取方式",
+        "alternativeHeadline": "",
+        "description": "
+      
+        string path=\u0026#34;\u0026#34;\/\/这里定义了excel文件的文件位置 string key= \u0026#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\u0026#34; \u002b path \u002b \u0026#34;;Extended Properties=\u0026#39;Excel 8.0;HDR=NO;IMEX=1\u0026#39;;\u0026#34;; OledbConnection connection =new OledbConnection(key); connection.Open(); string sql=\u0026#34;select * from [sheet1$]\u0026#34;; OledbDataAdapter adapter=new OledbDataAdapter(sql,connection); DataSet tempDataSet=new DataSet(); adapter.Fill(tempDataSet); 首先，在c#中数据表是这样子的，c#中有DataSet和DataTable两个关键字，然后我们可以理解DataSet是一类数据表的集合，他是在内存中的虚拟表的集合；DataTable是一种在内存中的虚拟表，他可以存储任何表的数据。。。这么说好抽象，其实可以这样子理解，DataTable是一张a4纸，然后a4纸上画着表格存着很多数据，DataSet就是一沓a4纸啦！！！！\n前情已经讲述完成，oledb，是一种数据库的方式，其实oledb是早期odbc连接方式的加强版，微软设计出这种应用程序接口是为了连接关系型数据库和非关系型数据库还有其他的奇怪的数据库，说白了是为了隔离每种数据库操作的差异，在我用过的连接比如说sql server和access数据库来说，都是先通过一串字符串来定义一个连接，就是我上面写的那个string类型的key，具体如下：\n\/连接Sql Server string key=\u0026#34;PROVIDER=SQLOLEDB;DATA SOURCE=servername;UID=xyz;PWD=xxx;DATABASE=dbname\u0026#34; \/\/连接 Microsoft Access string key= \u0026#34;PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=d:\\abc\\defg.mdb\u0026#34; \/\/连接 Microsoft Excel 07版本及老版本 string key=\u0026#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\u0026#34; \u002b Path \u002b \u0026#34;;\u0026#34; \u002b \u0026#34;Extended Properties=\\\u0026#34;Excel 12.0;HDR=NO;IMEX=1;\\\u0026#34;\u0026#34; \/\/连接 Microsoft Excel 07版本及新版本 string key=\u0026#34;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\u0026#34; \u002b strExcelPath \u002b \u0026#34;;\u0026#34; \u002b \u0026#34;Extended Properties=\\\u0026#34;Excel 8.
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E8%AF%A6%E8%A7%A3excel%E8%AF%BB%E5%8F%96%E6%96%B9%E5%BC%8F\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2019",
+        "dateCreated": "2019-06-08T00:00:00.00Z",
+        "datePublished": "2019-06-08T00:00:00.00Z",
+        "dateModified": "2019-06-08T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E8%AF%A6%E8%A7%A3excel%E8%AF%BB%E5%8F%96%E6%96%B9%E5%BC%8F\/",
+        "wordCount" : "77",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>详解Excel读取方式</h1>
+      <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<pre tabindex="0"><code>string path=&#34;&#34;//这里定义了excel文件的文件位置
+string key= &#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; + path + &#34;;Extended Properties=&#39;Excel 8.0;HDR=NO;IMEX=1&#39;;&#34;; 
+OledbConnection connection =new OledbConnection(key);
+connection.Open();
+string sql=&#34;select * from [sheet1$]&#34;;
+OledbDataAdapter adapter=new OledbDataAdapter(sql,connection);
+DataSet tempDataSet=new DataSet();
+adapter.Fill(tempDataSet);
+</code></pre><ul>
+<li>
+<p>首先，在c#中数据表是这样子的，c#中有DataSet和DataTable两个关键字，然后我们可以理解DataSet是一类数据表的集合，他是在内存中的虚拟表的集合；DataTable是一种在内存中的虚拟表，他可以存储任何表的数据。。。这么说好抽象，其实可以这样子理解，DataTable是一张a4纸，然后a4纸上画着表格存着很多数据，DataSet就是一沓a4纸啦！！！！<!-- raw HTML omitted --></p>
+</li>
+<li>
+<p>前情已经讲述完成，oledb，是一种数据库的方式，其实oledb是早期odbc连接方式的加强版，微软设计出这种应用程序接口是为了连接关系型数据库和非关系型数据库还有其他的奇怪的数据库，说白了是为了隔离每种数据库操作的差异，在我用过的连接比如说sql server和access数据库来说，都是先通过一串字符串来定义一个连接，就是我上面写的那个string类型的key，具体如下：</p>
+</li>
+</ul>
+<pre tabindex="0"><code>/连接Sql Server
+string key=&#34;PROVIDER=SQLOLEDB;DATA SOURCE=servername;UID=xyz;PWD=xxx;DATABASE=dbname&#34;
+//连接 Microsoft Access
+string key= &#34;PROVIDER=MICROSOFT.JET.OLEDB.4.0;DATA SOURCE=d:\abc\defg.mdb&#34;
+//连接 Microsoft Excel 07版本及老版本
+string key=&#34;Provider=Microsoft.ACE.OLEDB.12.0;Data Source=&#34; + Path + &#34;;&#34; + &#34;Extended Properties=\&#34;Excel 12.0;HDR=NO;IMEX=1;\&#34;&#34;
+//连接 Microsoft Excel 07版本及新版本
+string key=&#34;Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&#34; + strExcelPath + &#34;;&#34; + &#34;Extended Properties=\&#34;Excel 8.0;HDR=NO;IMEX=1;\&#34;&#34;
+</code></pre><ul>
+<li>这些key中间一个空格都不能乱加的！！！！！，要不然根本读不出来！！！！！</li>
+<li>接下来就是正常套路啦，首先通过OledbConnection声明一个基于key的链接connection,然后打开连接，定义一个sql，把操作放进去，然后通过适配器（OledbAdapter）进行操作，然后通过adapter的fill方法，将得到的数据放到内存中的DataSet就行了，完美！！！内存中就好操作了！！
+其实这个东西可以理解为电脑电源，不一样的key就好像国标220v和港版110v，我们通过适配器的电源头怼上插座，然后通过sql语言也就是整流线圈把交流电整成直流电，然后再把直流电输出主板等等地方也就是dataset！！！</li>
+</ul>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

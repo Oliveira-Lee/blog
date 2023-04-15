@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        Vue学习笔记一 基础学习
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Vue学习笔记一 基础学习"/>
+<meta name="twitter:description" content="Ruoyi-Vue
+虚拟DOM 按照我的理解，浏览器是先分析html节点，然后构建成，一个DOM树，然后解析CSS文件和html节点上我们写的样式信息，生成一个样式表，最后将DOM树和样式表关联起来构建成一个Render树，每个DOM都有attach方法，接受样式信息，返回一个render对象，根据这些对象构建成一个Render树，然后浏览器根据Render树绘制出页面出来。但是这不是严格的，这三种是一种异步交叉的关系。这个就是整个一个正常流程. 在很老的开发中，在每次操作DOM树时，每操作一次就会走一遍上一段的流程，如果操作十次就会更新十次，所以这个是很难受的，所以虚拟DOM就是为了解决这个问题而设计出来的，如果在虚拟dom中操作十次，他不会更新十次，而是会将10次的更新保存到一个本地js对象中，然后再一次更新到（attach）到DOM树上。故而页面的更新都会记录在本地的js对象中，操作内存中的js对象明显比更新十次要快得多，更新快结束时直接映射成真实DOM然后再由浏览器绘制。 文件夹常规结构 .eslinttrc.js: 有个东西叫做eslint，这个就是eslint的配置文件，他是一个代码检查工具，用来检查你写的代码是不是规范的，这个东西在每个公司里面是不同滴！！! babel.config.js: 这个是另一个工具叫做Babel的配置文件，因为在前端中存在es6，es7等等的语法，但是你得考虑一下，我们有很多的浏览器，比如Google的Chorme，巨硬的Edge，还有火狐的Firfox，手机上开发的更多了，这个工具就是一个js编译器，用来把你写的代码转换为浏览器兼容的语法。 public：这个目录包含一些Webpack编译过程中没有加工处理过的文件，比如favicon.ico（项目图标）和index.html（这个是Vue应用来运行的模版文件，有点像Java中main函数的感觉） src：这不用说，这就是核心代码目录. 生命周期钩子 每个Vue组建在创建的时候都需要初始化，比如会进行数据监听和编译模版，更新DOM等等吧啦吧啦，这些动作就可以视为是生命周期钩子的函数，按照我的理解，有点类似页面上某个小块创建时，暴露出的几个api，通过这些api实现某些必须的操作。 Vue生命周期图示： 按照上面的图示所示，主要分成了五个生命周期 "/>
+
+
+
+  
+  <meta property="og:title" content="Vue学习笔记一 基础学习" />
+<meta property="og:description" content="Ruoyi-Vue
+虚拟DOM 按照我的理解，浏览器是先分析html节点，然后构建成，一个DOM树，然后解析CSS文件和html节点上我们写的样式信息，生成一个样式表，最后将DOM树和样式表关联起来构建成一个Render树，每个DOM都有attach方法，接受样式信息，返回一个render对象，根据这些对象构建成一个Render树，然后浏览器根据Render树绘制出页面出来。但是这不是严格的，这三种是一种异步交叉的关系。这个就是整个一个正常流程. 在很老的开发中，在每次操作DOM树时，每操作一次就会走一遍上一段的流程，如果操作十次就会更新十次，所以这个是很难受的，所以虚拟DOM就是为了解决这个问题而设计出来的，如果在虚拟dom中操作十次，他不会更新十次，而是会将10次的更新保存到一个本地js对象中，然后再一次更新到（attach）到DOM树上。故而页面的更新都会记录在本地的js对象中，操作内存中的js对象明显比更新十次要快得多，更新快结束时直接映射成真实DOM然后再由浏览器绘制。 文件夹常规结构 .eslinttrc.js: 有个东西叫做eslint，这个就是eslint的配置文件，他是一个代码检查工具，用来检查你写的代码是不是规范的，这个东西在每个公司里面是不同滴！！! babel.config.js: 这个是另一个工具叫做Babel的配置文件，因为在前端中存在es6，es7等等的语法，但是你得考虑一下，我们有很多的浏览器，比如Google的Chorme，巨硬的Edge，还有火狐的Firfox，手机上开发的更多了，这个工具就是一个js编译器，用来把你写的代码转换为浏览器兼容的语法。 public：这个目录包含一些Webpack编译过程中没有加工处理过的文件，比如favicon.ico（项目图标）和index.html（这个是Vue应用来运行的模版文件，有点像Java中main函数的感觉） src：这不用说，这就是核心代码目录. 生命周期钩子 每个Vue组建在创建的时候都需要初始化，比如会进行数据监听和编译模版，更新DOM等等吧啦吧啦，这些动作就可以视为是生命周期钩子的函数，按照我的理解，有点类似页面上某个小块创建时，暴露出的几个api，通过这些api实现某些必须的操作。 Vue生命周期图示： 按照上面的图示所示，主要分成了五个生命周期 " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-11-24T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "Vue学习笔记一 基础学习",
+        "headline": "Vue学习笔记一 基础学习",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Ruoyi-Vue\n虚拟DOM 按照我的理解，浏览器是先分析html节点，然后构建成，一个DOM树，然后解析CSS文件和html节点上我们写的样式信息，生成一个样式表，最后将DOM树和样式表关联起来构建成一个Render树，每个DOM都有attach方法，接受样式信息，返回一个render对象，根据这些对象构建成一个Render树，然后浏览器根据Render树绘制出页面出来。但是这不是严格的，这三种是一种异步交叉的关系。这个就是整个一个正常流程. 在很老的开发中，在每次操作DOM树时，每操作一次就会走一遍上一段的流程，如果操作十次就会更新十次，所以这个是很难受的，所以虚拟DOM就是为了解决这个问题而设计出来的，如果在虚拟dom中操作十次，他不会更新十次，而是会将10次的更新保存到一个本地js对象中，然后再一次更新到（attach）到DOM树上。故而页面的更新都会记录在本地的js对象中，操作内存中的js对象明显比更新十次要快得多，更新快结束时直接映射成真实DOM然后再由浏览器绘制。 文件夹常规结构 .eslinttrc.js: 有个东西叫做eslint，这个就是eslint的配置文件，他是一个代码检查工具，用来检查你写的代码是不是规范的，这个东西在每个公司里面是不同滴！！! babel.config.js: 这个是另一个工具叫做Babel的配置文件，因为在前端中存在es6，es7等等的语法，但是你得考虑一下，我们有很多的浏览器，比如Google的Chorme，巨硬的Edge，还有火狐的Firfox，手机上开发的更多了，这个工具就是一个js编译器，用来把你写的代码转换为浏览器兼容的语法。 public：这个目录包含一些Webpack编译过程中没有加工处理过的文件，比如favicon.ico（项目图标）和index.html（这个是Vue应用来运行的模版文件，有点像Java中main函数的感觉） src：这不用说，这就是核心代码目录. 生命周期钩子 每个Vue组建在创建的时候都需要初始化，比如会进行数据监听和编译模版，更新DOM等等吧啦吧啦，这些动作就可以视为是生命周期钩子的函数，按照我的理解，有点类似页面上某个小块创建时，暴露出的几个api，通过这些api实现某些必须的操作。 Vue生命周期图示： 按照上面的图示所示，主要分成了五个生命周期 
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2022",
+        "dateCreated": "2022-11-24T00:00:00.00Z",
+        "datePublished": "2022-11-24T00:00:00.00Z",
+        "dateModified": "2022-11-24T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80\/",
+        "wordCount" : "15",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>Vue学习笔记一 基础学习</h1>
+      <p><a href="https://github.com/yangzongzhuan/RuoYi-Vue">Ruoyi-Vue</a><!-- raw HTML omitted --></p>
+<ol>
+<li>虚拟DOM<!-- raw HTML omitted -->
+按照我的理解，浏览器是先分析html节点，然后构建成，一个DOM树，然后解析CSS文件和html节点上我们写的样式信息，生成一个样式表，最后将DOM树和样式表关联起来构建成一个Render树，每个DOM都有attach方法，接受样式信息，返回一个render对象，根据这些对象构建成一个Render树，然后浏览器根据Render树绘制出页面出来。但是这不是严格的，这三种是一种异步交叉的关系。这个就是整个一个正常流程.<!-- raw HTML omitted -->
+在很老的开发中，在每次操作DOM树时，每操作一次就会走一遍上一段的流程，如果操作十次就会更新十次，所以这个是很难受的，所以虚拟DOM就是为了解决这个问题而设计出来的，如果在虚拟dom中操作十次，他不会更新十次，而是会将10次的更新保存到一个本地js对象中，然后再一次更新到（attach）到DOM树上。故而页面的更新都会记录在本地的js对象中，操作内存中的js对象明显比更新十次要快得多，更新快结束时直接映射成真实DOM然后再由浏览器绘制。<!-- raw HTML omitted --></li>
+<li>文件夹常规结构<!-- raw HTML omitted -->
+<ul>
+<li>.eslinttrc.js: 有个东西叫做eslint，这个就是eslint的配置文件，他是一个代码检查工具，用来检查你写的代码是不是规范的，这个东西在每个公司里面是不同滴！！!</li>
+<li>babel.config.js: 这个是另一个工具叫做Babel的配置文件，因为在前端中存在es6，es7等等的语法，但是你得考虑一下，我们有很多的浏览器，比如Google的Chorme，巨硬的Edge，还有火狐的Firfox，手机上开发的更多了，这个工具就是一个js编译器，用来把你写的代码转换为浏览器兼容的语法。</li>
+<li>public：这个目录包含一些Webpack编译过程中没有加工处理过的文件，比如favicon.ico（项目图标）和index.html（这个是Vue应用来运行的模版文件，有点像Java中main函数的感觉）</li>
+<li>src：这不用说，这就是核心代码目录.</li>
+</ul>
+</li>
+<li>生命周期钩子<!-- raw HTML omitted -->
+每个Vue组建在创建的时候都需要初始化，比如会进行数据监听和编译模版，更新DOM等等吧啦吧啦，这些动作就可以视为是生命周期钩子的函数，按照我的理解，有点类似页面上某个小块创建时，暴露出的几个api，通过这些api实现某些必须的操作。<!-- raw HTML omitted -->
+Vue生命周期图示：<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+按照上面的图示所示，主要分成了五个生命周期</li>
+</ol>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

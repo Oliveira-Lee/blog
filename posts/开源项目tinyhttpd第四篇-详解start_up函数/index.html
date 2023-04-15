@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E5%9B%9B%E7%AF%87-%E8%AF%A6%E8%A7%A3start_up%E5%87%BD%E6%95%B0/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="大周六的无聊的很，不如来继续看这一大段开源代码，这一次我们按照Github上面那位大佬推荐的步骤来看推荐的步骤来看，先看start_up函数。 说多无益，先上该段代码：
+int startup(u_short *port) { int httpd = 0; int on = 1; struct sockaddr_in name; httpd = socket(PF_INET, SOCK_STREAM, 0); if (httpd == -1) error_die(&#34;socket&#34;); memset(&amp;name, 0, sizeof(name)); name.sin_family = AF_INET; name.sin_port = htons(*port); name.sin_addr.s_addr = htonl(INADDR_ANY); if ((setsockopt(httpd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on))) &lt; 0) { error_die(&#34;setsockopt failed&#34;); } if (bind(httpd, (struct sockaddr *)&amp;name, sizeof(name)) &lt; 0) error_die(&#34;bind&#34;); if (*port == 0) /* if dynamically allocating a port */ { socklen_t namelen = sizeof(name); if (getsockname(httpd, (struct sockaddr *)&amp;name, &amp;namelen) == -1) error_die(&#34;getsockname&#34;); *port = ntohs(name."/>
+
+
+
+  
+  <meta property="og:title" content="" />
+<meta property="og:description" content="大周六的无聊的很，不如来继续看这一大段开源代码，这一次我们按照Github上面那位大佬推荐的步骤来看推荐的步骤来看，先看start_up函数。 说多无益，先上该段代码：
+int startup(u_short *port) { int httpd = 0; int on = 1; struct sockaddr_in name; httpd = socket(PF_INET, SOCK_STREAM, 0); if (httpd == -1) error_die(&#34;socket&#34;); memset(&amp;name, 0, sizeof(name)); name.sin_family = AF_INET; name.sin_port = htons(*port); name.sin_addr.s_addr = htonl(INADDR_ANY); if ((setsockopt(httpd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on))) &lt; 0) { error_die(&#34;setsockopt failed&#34;); } if (bind(httpd, (struct sockaddr *)&amp;name, sizeof(name)) &lt; 0) error_die(&#34;bind&#34;); if (*port == 0) /* if dynamically allocating a port */ { socklen_t namelen = sizeof(name); if (getsockname(httpd, (struct sockaddr *)&amp;name, &amp;namelen) == -1) error_die(&#34;getsockname&#34;); *port = ntohs(name." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E5%9B%9B%E7%AF%87-%E8%AF%A6%E8%A7%A3start_up%E5%87%BD%E6%95%B0/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-07-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-07-05T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "",
+        "headline": "",
+        "alternativeHeadline": "",
+        "description": "
+      
+        大周六的无聊的很，不如来继续看这一大段开源代码，这一次我们按照Github上面那位大佬推荐的步骤来看推荐的步骤来看，先看start_up函数。 说多无益，先上该段代码：\nint startup(u_short *port) { int httpd = 0; int on = 1; struct sockaddr_in name; httpd = socket(PF_INET, SOCK_STREAM, 0); if (httpd == -1) error_die(\u0026#34;socket\u0026#34;); memset(\u0026amp;name, 0, sizeof(name)); name.sin_family = AF_INET; name.sin_port = htons(*port); name.sin_addr.s_addr = htonl(INADDR_ANY); if ((setsockopt(httpd, SOL_SOCKET, SO_REUSEADDR, \u0026amp;on, sizeof(on))) \u0026lt; 0) { error_die(\u0026#34;setsockopt failed\u0026#34;); } if (bind(httpd, (struct sockaddr *)\u0026amp;name, sizeof(name)) \u0026lt; 0) error_die(\u0026#34;bind\u0026#34;); if (*port == 0) \/* if dynamically allocating a port *\/ { socklen_t namelen = sizeof(name); if (getsockname(httpd, (struct sockaddr *)\u0026amp;name, \u0026amp;namelen) == -1) error_die(\u0026#34;getsockname\u0026#34;); *port = ntohs(name.
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E5%9B%9B%E7%AF%87-%E8%AF%A6%E8%A7%A3start_up%E5%87%BD%E6%95%B0\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2020",
+        "dateCreated": "2020-07-05T00:00:00.00Z",
+        "datePublished": "2020-07-05T00:00:00.00Z",
+        "dateModified": "2020-07-05T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E5%9B%9B%E7%AF%87-%E8%AF%A6%E8%A7%A3start_up%E5%87%BD%E6%95%B0\/",
+        "wordCount" : "209",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1></h1>
+      <p>大周六的无聊的很，不如来继续看这一大段开源代码，这一次我们按照Github上面那位大佬推荐的步骤来看推荐的步骤来看，先看start_up函数。<!-- raw HTML omitted -->
+说多无益，先上该段代码：<!-- raw HTML omitted --></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">startup</span>(u_short <span style="color:#f92672">*</span>port)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> httpd <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> on <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    httpd <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(PF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (httpd <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_die</span>(<span style="color:#e6db74">&#34;socket&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>name, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(name));
+</span></span><span style="display:flex;"><span>    name.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    name.sin_port <span style="color:#f92672">=</span> <span style="color:#a6e22e">htons</span>(<span style="color:#f92672">*</span>port);
+</span></span><span style="display:flex;"><span>    name.sin_addr.s_addr <span style="color:#f92672">=</span> <span style="color:#a6e22e">htonl</span>(INADDR_ANY);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((<span style="color:#a6e22e">setsockopt</span>(httpd, SOL_SOCKET, SO_REUSEADDR, <span style="color:#f92672">&amp;</span>on, <span style="color:#66d9ef">sizeof</span>(on))) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)  
+</span></span><span style="display:flex;"><span>    {  
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_die</span>(<span style="color:#e6db74">&#34;setsockopt failed&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">bind</span>(httpd, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>name, <span style="color:#66d9ef">sizeof</span>(name)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_die</span>(<span style="color:#e6db74">&#34;bind&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>port <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)  <span style="color:#75715e">/* if dynamically allocating a port */</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">socklen_t</span> namelen <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(name);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">getsockname</span>(httpd, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>name, <span style="color:#f92672">&amp;</span>namelen) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">error_die</span>(<span style="color:#e6db74">&#34;getsockname&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span>port <span style="color:#f92672">=</span> <span style="color:#a6e22e">ntohs</span>(name.sin_port);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">listen</span>(httpd, <span style="color:#ae81ff">5</span>) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">error_die</span>(<span style="color:#e6db74">&#34;listen&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(httpd);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这个函数的注释。。。。其实我也看不懂，建议谷歌翻译一下。大概意思是说哈，开启一个线程在参数中的端口不为0的情况下监听一个端口，如果端口为0的话，那么就随机分配一个接口来使用。<!-- raw HTML omitted -->
+接下来就是socket函数，这个函数是在sys/types.h头文件中定义的一个函数，这个函数的参数如下：<!-- raw HTML omitted --></p>
+<pre tabindex="0"><code>int socket(int domain, int type, int protocol);
+</code></pre><p>这个函数的作用是用来建立一个协议族为domain，协议类型为type，协议编号为protocol的套接字描述符，如果函数调用成功的话，会返回标示这个套接字的文件描述符，如果失败就会返回-1.<!-- raw HTML omitted -->
+domain这个参数是用来设置网路通信的域，socket函数根据这个参数来选择通信协议的族，通信协议在头文件sys/socket.h中定义。<!-- raw HTML omitted -->
+type用于设置套接字通信的类型，主要有SOCKET_STREAM(流式套接字)，SOCK_DGRAM(数据包套接字)等。<!-- raw HTML omitted --></p>
+<pre tabindex="0"><code>SOCK_STREAM//tcp连接，提供序列化的可靠的双向连接的字节流
+SOCK_DGRAM//支持udp连接
+SOCK_SEQPACKET//序列化包，提供一个序列化的，可靠的，双向的基本连接的数据连接通道，数据长度定常。
+SOCK_RAW//提供原始网络协议访问
+SOCK-RDM//提供可靠的数据报文，不过可能数据会有乱序
+SOCK_PACKET//这是一个专有类型，不过能够在通用程序中使用
+</code></pre><p>接下来的一句就是通过httpd的值来判断，如果是-1的话那就认为是套接字建立不成功，然后程序接下来没得玩了，这个还真没有什么好说的</p>
+<pre tabindex="0"><code>/**********************************************************************/
+/* Print out an error message with perror() (for system errors; based
+ * on value of errno, which indicates system call errors) and exit the
+ * program indicating an error. */
+/**********************************************************************/
+void error_die(const char *sc)
+{
+    perror(sc);
+    exit(1);
+}
+</code></pre><p>接下来就是memset函数,这个函数定义如下：</p>
+<pre tabindex="0"><code>// 将s中的n个字节的内容全部挨个替换成ch，返回s
+void *memset(void *s, int ch, size_t n);
+</code></pre><p>我用过一个带s版本和不带s的版本，这两个版本的函数平时都是用来将动态分配的内存进行清空操作和分配操作的，但是这个函数有意思的一点时，它赋值是逐字节逐字节进行赋值的，比如：</p>
+<pre tabindex="0"><code>char str[5];
+</code></pre><p>我们想给这个数组全部赋值为1，那么就可以这么写</p>
+<pre tabindex="0"><code>memset(str,1,5)
+</code></pre><p>这样子就是”00000“，但是有意思的是，如果给其他数据类型的数组进行赋值时，比如我想通过给int类型，长度为5的数组进行赋值</p>
+<pre tabindex="0"><code>memset(num,1,sizeof(int)*5)
+</code></pre><p>按照常理来说，我们认为num数组每个元素的值都是0x1,但是实际上来说每个元素的值其实是0x000000001,000000001,000000001,000000001,说白了就是每个字节都赋值了0x1这个值，这里要千万注意，要不然会出现奇怪的bug，毕竟解决bug耗费的时间还是很巨大的。
+不过看到这里我突然想起了一个很容易出错的点，也是我曾经在哪本书，好像是计算机组成原理上讲的一个点</p>
+<pre tabindex="0"><code>struct{
+    char a;
+    int b;
+}
+</code></pre><p>如果给他套上一个sizeof，会return一个什么值呢?<!-- raw HTML omitted -->
+其实这个问题的等效问题就是有多种数据类型的结构体在分配内存时，是分配多少，例如：</p>
+<pre tabindex="0"><code>struct A{
+	char a;
+	int b;
+	short c;
+};
+struct B{
+	char a;
+	short b;
+	int c;
+};
+</code></pre><p>这两个结构体的内存占用到底一样不一样；<!-- raw HTML omitted -->
+在结构体中有两个规则<!-- raw HTML omitted -->
+1.每个结构体成员的起始地址为该成员大小的整数倍，即int型成员的起始地址只能为0、4、8等;<!-- raw HTML omitted -->
+2.结构体的大小为其中最大成员大小的整数倍;<!-- raw HTML omitted -->
+所以我们可以分析一下结构体A，在32位系统中，char类型占用1个字节，下一个就是int类型(4个字节)，根据规则1，int类型的起始地址只能为4<em>n(n=0,1,2,&hellip;),所以需要在char类型和int类型之间填充3个字节，这就是8个字节，然后接下来是short（占用2个字节），这个时候就需要考虑规则2，所以结构体A需要占用12个字节，一共空了5个字节；<!-- raw HTML omitted -->
+接下来分析结构体B，同样在32位系统中，char类型占用1个字节，这没什么好说的，下一个short的话，根据规则1，short类型的起始地址只能为2</em>n(n=0,1,2,&hellip;)，这个时候就需要在short和char之间填充1个字节，现在算下来就是4个字节，然后接下来是int，4个字节，这样子算下来B占用8个字节；<!-- raw HTML omitted -->
+这只是默认情况下的结构体占用情况，如果想节省内存的话，可以使用宏来紧凑数据。</p>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

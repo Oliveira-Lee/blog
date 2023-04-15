@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        详解算法 最长连续子序列系列问题
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E8%AF%A6%E8%A7%A3%E7%AE%97%E6%B3%95-%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E5%BA%8F%E5%88%97%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="详解算法 最长连续子序列系列问题"/>
+<meta name="twitter:description" content="常规最长连续子序列问题 通常这个算法的问题主要形式主要是给定一个无序的整数数组，然后找出最长连续子序列的长度,以下代码全部基于C&#43;&#43;语言进行演示 常规解法 这种解法是正常人刚开始看到这个问题时，头脑中冒出的第一种解法，这个解法认为这个数组开始的每个数字都是一个连续数组的开头，然后从这个起点开始遍历知道剩下的数字有没有相对上一个数字连续的数字，一直迭代到不存在的某个数字，顺便记录最大的连续子序列长度。 bool isContain(int arr[],int arrLength,int num) { for(int i=0;i&lt;arrLength;i&#43;&#43;) { if(arr[i]==num)return true; return false; } } int longestContinueArray(int arr[]) { int longestStreak=0; int arrLenth=arr.length; for(int num:arr) { int currentNum=num; int currentStreak=1; while(isContain(arr,arrLength,currentNum)) { currentNum&#43;=1; currentStreak&#43;=1; } longestStreak=Math.max(longestStreak,currentStreak); } return longestStreak; } 这种算法的话时间复杂度是非常糟糕的（因为一般来说刚开始解决问题时的头一个方法永远是一个最复杂的方法。。。最简单的一般都是最复杂的），因为他的时间复杂度大概为O(n^3)。所以我们现在考虑如何优化这个算法，首先因为我们要找的是个连续序列，所以可以先进行排序和去重，这样子可以省掉n个时间复杂度的查找时间；然后我们必须考虑程序中提供的数组是不是为空，如果为空或者为null的话我们应该考虑以下如何处理这种错误情况；最后我们发现我们在遍历过程中出现了大量的重复过程比如：
+1,2,7,3,4,5 比如上面这个数组的最长连续子序列肯定是5，然后我们根据上面那个算法可以发现，当for循环中的num为1时，能够查到的最长序列为5，当num为2时，我们发现我们的现在查到的以前已经查过了，想办法不查这一部分可以大大优化整个算法的时间复杂度：
+int longestContinueArray(int []arr) { if(arr==null||arr.length==0)return 0; Array.sort(arr); int longestStreak=1; int currentStreak=1; for(int i=1;i&lt;arr.length;i&#43;&#43;) { if(i&#43;1&lt;arr.length&amp;&amp;arr[i]&#43;1==arr[i&#43;1]) currentStreak&#43;&#43;; else { longestStreak=Math.max(longestStreak,currentStreak); currentStreak=1; } } return longestStreak; } 以上代码解决了以上的问题，但是时间复杂度最优为nlogn, 最差为n^2,其实我们完全可以用c&#43;&#43;一些提供的特定结构来进一步简化整体算法的时间复杂度。比如我们可以使用C&#43;&#43;中的set，自动去重且查询为O(1)"/>
+
+
+
+  
+  <meta property="og:title" content="详解算法 最长连续子序列系列问题" />
+<meta property="og:description" content="常规最长连续子序列问题 通常这个算法的问题主要形式主要是给定一个无序的整数数组，然后找出最长连续子序列的长度,以下代码全部基于C&#43;&#43;语言进行演示 常规解法 这种解法是正常人刚开始看到这个问题时，头脑中冒出的第一种解法，这个解法认为这个数组开始的每个数字都是一个连续数组的开头，然后从这个起点开始遍历知道剩下的数字有没有相对上一个数字连续的数字，一直迭代到不存在的某个数字，顺便记录最大的连续子序列长度。 bool isContain(int arr[],int arrLength,int num) { for(int i=0;i&lt;arrLength;i&#43;&#43;) { if(arr[i]==num)return true; return false; } } int longestContinueArray(int arr[]) { int longestStreak=0; int arrLenth=arr.length; for(int num:arr) { int currentNum=num; int currentStreak=1; while(isContain(arr,arrLength,currentNum)) { currentNum&#43;=1; currentStreak&#43;=1; } longestStreak=Math.max(longestStreak,currentStreak); } return longestStreak; } 这种算法的话时间复杂度是非常糟糕的（因为一般来说刚开始解决问题时的头一个方法永远是一个最复杂的方法。。。最简单的一般都是最复杂的），因为他的时间复杂度大概为O(n^3)。所以我们现在考虑如何优化这个算法，首先因为我们要找的是个连续序列，所以可以先进行排序和去重，这样子可以省掉n个时间复杂度的查找时间；然后我们必须考虑程序中提供的数组是不是为空，如果为空或者为null的话我们应该考虑以下如何处理这种错误情况；最后我们发现我们在遍历过程中出现了大量的重复过程比如：
+1,2,7,3,4,5 比如上面这个数组的最长连续子序列肯定是5，然后我们根据上面那个算法可以发现，当for循环中的num为1时，能够查到的最长序列为5，当num为2时，我们发现我们的现在查到的以前已经查过了，想办法不查这一部分可以大大优化整个算法的时间复杂度：
+int longestContinueArray(int []arr) { if(arr==null||arr.length==0)return 0; Array.sort(arr); int longestStreak=1; int currentStreak=1; for(int i=1;i&lt;arr.length;i&#43;&#43;) { if(i&#43;1&lt;arr.length&amp;&amp;arr[i]&#43;1==arr[i&#43;1]) currentStreak&#43;&#43;; else { longestStreak=Math.max(longestStreak,currentStreak); currentStreak=1; } } return longestStreak; } 以上代码解决了以上的问题，但是时间复杂度最优为nlogn, 最差为n^2,其实我们完全可以用c&#43;&#43;一些提供的特定结构来进一步简化整体算法的时间复杂度。比如我们可以使用C&#43;&#43;中的set，自动去重且查询为O(1)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E8%AF%A6%E8%A7%A3%E7%AE%97%E6%B3%95-%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E5%BA%8F%E5%88%97%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-09-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-09-02T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "详解算法 最长连续子序列系列问题",
+        "headline": "详解算法 最长连续子序列系列问题",
+        "alternativeHeadline": "",
+        "description": "
+      
+        常规最长连续子序列问题 通常这个算法的问题主要形式主要是给定一个无序的整数数组，然后找出最长连续子序列的长度,以下代码全部基于C\u002b\u002b语言进行演示 常规解法 这种解法是正常人刚开始看到这个问题时，头脑中冒出的第一种解法，这个解法认为这个数组开始的每个数字都是一个连续数组的开头，然后从这个起点开始遍历知道剩下的数字有没有相对上一个数字连续的数字，一直迭代到不存在的某个数字，顺便记录最大的连续子序列长度。 bool isContain(int arr[],int arrLength,int num) { for(int i=0;i\u0026lt;arrLength;i\u002b\u002b) { if(arr[i]==num)return true; return false; } } int longestContinueArray(int arr[]) { int longestStreak=0; int arrLenth=arr.length; for(int num:arr) { int currentNum=num; int currentStreak=1; while(isContain(arr,arrLength,currentNum)) { currentNum\u002b=1; currentStreak\u002b=1; } longestStreak=Math.max(longestStreak,currentStreak); } return longestStreak; } 这种算法的话时间复杂度是非常糟糕的（因为一般来说刚开始解决问题时的头一个方法永远是一个最复杂的方法。。。最简单的一般都是最复杂的），因为他的时间复杂度大概为O(n^3)。所以我们现在考虑如何优化这个算法，首先因为我们要找的是个连续序列，所以可以先进行排序和去重，这样子可以省掉n个时间复杂度的查找时间；然后我们必须考虑程序中提供的数组是不是为空，如果为空或者为null的话我们应该考虑以下如何处理这种错误情况；最后我们发现我们在遍历过程中出现了大量的重复过程比如：\n1,2,7,3,4,5 比如上面这个数组的最长连续子序列肯定是5，然后我们根据上面那个算法可以发现，当for循环中的num为1时，能够查到的最长序列为5，当num为2时，我们发现我们的现在查到的以前已经查过了，想办法不查这一部分可以大大优化整个算法的时间复杂度：\nint longestContinueArray(int []arr) { if(arr==null||arr.length==0)return 0; Array.sort(arr); int longestStreak=1; int currentStreak=1; for(int i=1;i\u0026lt;arr.length;i\u002b\u002b) { if(i\u002b1\u0026lt;arr.length\u0026amp;\u0026amp;arr[i]\u002b1==arr[i\u002b1]) currentStreak\u002b\u002b; else { longestStreak=Math.max(longestStreak,currentStreak); currentStreak=1; } } return longestStreak; } 以上代码解决了以上的问题，但是时间复杂度最优为nlogn, 最差为n^2,其实我们完全可以用c\u002b\u002b一些提供的特定结构来进一步简化整体算法的时间复杂度。比如我们可以使用C\u002b\u002b中的set，自动去重且查询为O(1)
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E8%AF%A6%E8%A7%A3%E7%AE%97%E6%B3%95-%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E5%BA%8F%E5%88%97%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2019",
+        "dateCreated": "2019-09-02T00:00:00.00Z",
+        "datePublished": "2019-09-02T00:00:00.00Z",
+        "dateModified": "2019-09-02T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E8%AF%A6%E8%A7%A3%E7%AE%97%E6%B3%95-%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E5%BA%8F%E5%88%97%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98\/",
+        "wordCount" : "106",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>详解算法 最长连续子序列系列问题</h1>
+      <ol>
+<li>常规最长连续子序列问题
+通常这个算法的问题主要形式主要是给定一个无序的整数数组，然后找出最长连续子序列的长度,以下代码全部基于C++语言进行演示</li>
+</ol>
+<ul>
+<li>常规解法
+这种解法是正常人刚开始看到这个问题时，头脑中冒出的第一种解法，这个解法认为这个数组开始的每个数字都是一个连续数组的开头，然后从这个起点开始遍历知道剩下的数字有没有相对上一个数字连续的数字，一直迭代到不存在的某个数字，顺便记录最大的连续子序列长度。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isContain</span>(<span style="color:#66d9ef">int</span> arr[],<span style="color:#66d9ef">int</span> arrLength,<span style="color:#66d9ef">int</span> num)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;i<span style="color:#f92672">&lt;</span>arrLength;i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(arr[i]<span style="color:#f92672">==</span>num)<span style="color:#66d9ef">return</span> true;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> false;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">longestContinueArray</span>(<span style="color:#66d9ef">int</span> arr[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> longestStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> arrLenth<span style="color:#f92672">=</span>arr.length;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> num:arr)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> currentNum<span style="color:#f92672">=</span>num;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> currentStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">while</span>(isContain(arr,arrLength,currentNum))
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>       currentNum<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>       currentStreak<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   longestStreak<span style="color:#f92672">=</span>Math.max(longestStreak,currentStreak);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> longestStreak;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这种算法的话时间复杂度是非常糟糕的（因为一般来说刚开始解决问题时的头一个方法永远是一个最复杂的方法。。。最简单的一般都是最复杂的），因为他的时间复杂度大概为O(n^3)。所以我们现在考虑如何优化这个算法，首先因为我们要找的是个连续序列，所以可以先进行排序和去重，这样子可以省掉n个时间复杂度的查找时间；然后我们必须考虑程序中提供的数组是不是为空，如果为空或者为null的话我们应该考虑以下如何处理这种错误情况；最后我们发现我们在遍历过程中出现了大量的重复过程比如：</p>
+<pre tabindex="0"><code>1,2,7,3,4,5
+</code></pre><p>比如上面这个数组的最长连续子序列肯定是5，然后我们根据上面那个算法可以发现，当for循环中的num为1时，能够查到的最长序列为5，当num为2时，我们发现我们的现在查到的以前已经查过了，想办法不查这一部分可以大大优化整个算法的时间复杂度：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">longestContinueArray</span>(<span style="color:#66d9ef">int</span> []arr)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(arr<span style="color:#f92672">==</span>null<span style="color:#f92672">||</span>arr.length<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>)<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    Array.sort(arr);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> longestStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> currentStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;i<span style="color:#f92672">&lt;</span>arr.length;i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">if</span>(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">&lt;</span>arr.length<span style="color:#f92672">&amp;&amp;</span>arr[i]<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">==</span>arr[i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>       currentStreak<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>           longestStreak<span style="color:#f92672">=</span>Math.max(longestStreak,currentStreak);
+</span></span><span style="display:flex;"><span>           currentStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> longestStreak;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以上代码解决了以上的问题，但是时间复杂度最优为nlogn, 最差为n^2,其实我们完全可以用c++一些提供的特定结构来进一步简化整体算法的时间复杂度。比如我们可以使用C++中的set，自动去重且查询为O(1)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">longestContinueArray</span>(<span style="color:#66d9ef">int</span> arr[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    set<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>numSet<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> set<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> num:arr)numSet.add(num);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> longestStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> num:numSet)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>numSet.contains(num<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> currentNum<span style="color:#f92672">=</span>num;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> currentStreak<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span>(numSet.contains(currentNum<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                currentNum<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>                currentStreak<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            longestStreak<span style="color:#f92672">=</span>Math.max(longestStreak,currentStreak);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> longestStreak;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>2.最长连续公共子序列
+先占个坑，未完待续。。。。</p>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

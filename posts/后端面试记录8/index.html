@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        如何设计一个秒杀系统
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%958/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="如何设计一个秒杀系统"/>
+<meta name="twitter:description" content="今天和面试官二轮对线时碰到了这个问题，害，我是个菜狗，Java实在是太小白了，当时只是说出了几个点，但是应该说的都不对，所以开个帖子仔细整理一下。 不管是完成一个系统还是完成一个功能，肯定要提前做好分析，然后罗列出所有开发和设计中可能遇到的的问题点，然后根据问题点找到解决方案，接下来设计架构，根据架构进行开发和检测，我认为一个开发应该是这样子的。 so经过我网上遍寻资料以及整理，我觉得一个秒杀系统遇到的问题有以下几点：
+高并发：既然是秒杀系统，那肯定是千军万马在一秒间过独木桥，所以系统如何扛得住高并发的请求；
+超卖：怎么防止某个商品卖超了；
+接口防刷：这个就涉及安全了，现在网上到处都是各种连点器，秒杀脚本等等各种奇怪的软件，目的就是为了代替人来抢某个商品，所以遇到这种刷单问题怎么解决；
+秒杀url可见 这是目前我能想到的一些问题，首先在这之前，我觉得要考虑一个问题，我们现在考虑的是如何把一个秒杀系统维持住的问题，换句话说就是如何实现一个秒杀系统业务的问题，but我们没有考虑一个问题，如果秒杀系统被玩的不好，出现缓存雪崩，缓存击穿，缓存穿透等等情况，巨量的流量直接打在数据库上，数据库服务器boom了，所有的后台服务一起挂掉了。。。我们肯定不能连带其他业务一起挂，所以以上考虑的前提就是先提前分库分表，gg也不能大家一起gg。
+接口防刷
+面对可见url的问题，因为有些稍微懂一点点技术的老铁都知道在chorme中可以看到前端的接口，所以我们在设计秒杀接口的时候一定要注意秒杀接口的可见性，不能在秒杀系统开始之前就有一堆人用程序来刷接口，所以在秒杀时间开始前，不能拿到秒杀接口，只有秒杀开始时，才返回秒杀地址和验证MD5，用户拿到这两个数据才可以进行秒杀； 如果多个账号在一个ip地址发出多个请求，我们可以在设计系统时检测ip请求频率，如果超过某个阈值，那么就弹出验证码或者其他东西进行验证； 当然最多的情况是一个账号发出多个请求，我们可以限定这个用户在发起一次秒杀后，需要等待才可以发起另一次请求，从而减少多个请求的压力，或者使用redis标志位，每个用户的请求都尝试在Redis中插入一个secondKill的标志位，成功插入的才可以执行后续的秒杀逻辑，其他的就被过滤掉。 当然还有多个账号不同ip发起不同请求，我们可以采用检测账号等级的或者检测性别的骚操作来减少操作。。。 前端进行优化的话，可以采用验证码，降低用户的请求速度，或者采用限购的策略，抢到一个商品后，不能再抢第二个，或者说将前端静态数据缓存在离用户最近的地方，比如用户浏览器，CDN或者服务器的缓存中。 2.超卖问题 缓存预热 在秒杀之前，需要将秒杀商品信息提前缓存到Redis中，这么秒杀开始时就直接从Redis读取，也就是缓存预热。 "/>
+
+
+
+  
+  <meta property="og:title" content="如何设计一个秒杀系统" />
+<meta property="og:description" content="今天和面试官二轮对线时碰到了这个问题，害，我是个菜狗，Java实在是太小白了，当时只是说出了几个点，但是应该说的都不对，所以开个帖子仔细整理一下。 不管是完成一个系统还是完成一个功能，肯定要提前做好分析，然后罗列出所有开发和设计中可能遇到的的问题点，然后根据问题点找到解决方案，接下来设计架构，根据架构进行开发和检测，我认为一个开发应该是这样子的。 so经过我网上遍寻资料以及整理，我觉得一个秒杀系统遇到的问题有以下几点：
+高并发：既然是秒杀系统，那肯定是千军万马在一秒间过独木桥，所以系统如何扛得住高并发的请求；
+超卖：怎么防止某个商品卖超了；
+接口防刷：这个就涉及安全了，现在网上到处都是各种连点器，秒杀脚本等等各种奇怪的软件，目的就是为了代替人来抢某个商品，所以遇到这种刷单问题怎么解决；
+秒杀url可见 这是目前我能想到的一些问题，首先在这之前，我觉得要考虑一个问题，我们现在考虑的是如何把一个秒杀系统维持住的问题，换句话说就是如何实现一个秒杀系统业务的问题，but我们没有考虑一个问题，如果秒杀系统被玩的不好，出现缓存雪崩，缓存击穿，缓存穿透等等情况，巨量的流量直接打在数据库上，数据库服务器boom了，所有的后台服务一起挂掉了。。。我们肯定不能连带其他业务一起挂，所以以上考虑的前提就是先提前分库分表，gg也不能大家一起gg。
+接口防刷
+面对可见url的问题，因为有些稍微懂一点点技术的老铁都知道在chorme中可以看到前端的接口，所以我们在设计秒杀接口的时候一定要注意秒杀接口的可见性，不能在秒杀系统开始之前就有一堆人用程序来刷接口，所以在秒杀时间开始前，不能拿到秒杀接口，只有秒杀开始时，才返回秒杀地址和验证MD5，用户拿到这两个数据才可以进行秒杀； 如果多个账号在一个ip地址发出多个请求，我们可以在设计系统时检测ip请求频率，如果超过某个阈值，那么就弹出验证码或者其他东西进行验证； 当然最多的情况是一个账号发出多个请求，我们可以限定这个用户在发起一次秒杀后，需要等待才可以发起另一次请求，从而减少多个请求的压力，或者使用redis标志位，每个用户的请求都尝试在Redis中插入一个secondKill的标志位，成功插入的才可以执行后续的秒杀逻辑，其他的就被过滤掉。 当然还有多个账号不同ip发起不同请求，我们可以采用检测账号等级的或者检测性别的骚操作来减少操作。。。 前端进行优化的话，可以采用验证码，降低用户的请求速度，或者采用限购的策略，抢到一个商品后，不能再抢第二个，或者说将前端静态数据缓存在离用户最近的地方，比如用户浏览器，CDN或者服务器的缓存中。 2.超卖问题 缓存预热 在秒杀之前，需要将秒杀商品信息提前缓存到Redis中，这么秒杀开始时就直接从Redis读取，也就是缓存预热。 " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%958/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-10-26T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "如何设计一个秒杀系统",
+        "headline": "如何设计一个秒杀系统",
+        "alternativeHeadline": "",
+        "description": "
+      
+        今天和面试官二轮对线时碰到了这个问题，害，我是个菜狗，Java实在是太小白了，当时只是说出了几个点，但是应该说的都不对，所以开个帖子仔细整理一下。 不管是完成一个系统还是完成一个功能，肯定要提前做好分析，然后罗列出所有开发和设计中可能遇到的的问题点，然后根据问题点找到解决方案，接下来设计架构，根据架构进行开发和检测，我认为一个开发应该是这样子的。 so经过我网上遍寻资料以及整理，我觉得一个秒杀系统遇到的问题有以下几点：\n高并发：既然是秒杀系统，那肯定是千军万马在一秒间过独木桥，所以系统如何扛得住高并发的请求；\n超卖：怎么防止某个商品卖超了；\n接口防刷：这个就涉及安全了，现在网上到处都是各种连点器，秒杀脚本等等各种奇怪的软件，目的就是为了代替人来抢某个商品，所以遇到这种刷单问题怎么解决；\n秒杀url可见 这是目前我能想到的一些问题，首先在这之前，我觉得要考虑一个问题，我们现在考虑的是如何把一个秒杀系统维持住的问题，换句话说就是如何实现一个秒杀系统业务的问题，but我们没有考虑一个问题，如果秒杀系统被玩的不好，出现缓存雪崩，缓存击穿，缓存穿透等等情况，巨量的流量直接打在数据库上，数据库服务器boom了，所有的后台服务一起挂掉了。。。我们肯定不能连带其他业务一起挂，所以以上考虑的前提就是先提前分库分表，gg也不能大家一起gg。\n接口防刷\n面对可见url的问题，因为有些稍微懂一点点技术的老铁都知道在chorme中可以看到前端的接口，所以我们在设计秒杀接口的时候一定要注意秒杀接口的可见性，不能在秒杀系统开始之前就有一堆人用程序来刷接口，所以在秒杀时间开始前，不能拿到秒杀接口，只有秒杀开始时，才返回秒杀地址和验证MD5，用户拿到这两个数据才可以进行秒杀； 如果多个账号在一个ip地址发出多个请求，我们可以在设计系统时检测ip请求频率，如果超过某个阈值，那么就弹出验证码或者其他东西进行验证； 当然最多的情况是一个账号发出多个请求，我们可以限定这个用户在发起一次秒杀后，需要等待才可以发起另一次请求，从而减少多个请求的压力，或者使用redis标志位，每个用户的请求都尝试在Redis中插入一个secondKill的标志位，成功插入的才可以执行后续的秒杀逻辑，其他的就被过滤掉。 当然还有多个账号不同ip发起不同请求，我们可以采用检测账号等级的或者检测性别的骚操作来减少操作。。。 前端进行优化的话，可以采用验证码，降低用户的请求速度，或者采用限购的策略，抢到一个商品后，不能再抢第二个，或者说将前端静态数据缓存在离用户最近的地方，比如用户浏览器，CDN或者服务器的缓存中。 2.超卖问题 缓存预热 在秒杀之前，需要将秒杀商品信息提前缓存到Redis中，这么秒杀开始时就直接从Redis读取，也就是缓存预热。 
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%958\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-10-26T00:00:00.00Z",
+        "datePublished": "2021-10-26T00:00:00.00Z",
+        "dateModified": "2021-10-26T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%958\/",
+        "wordCount" : "17",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>如何设计一个秒杀系统</h1>
+      <p>今天和面试官二轮对线时碰到了这个问题，害，我是个菜狗，Java实在是太小白了，当时只是说出了几个点，但是应该说的都不对，所以开个帖子仔细整理一下。<!-- raw HTML omitted -->
+不管是完成一个系统还是完成一个功能，肯定要提前做好分析，然后罗列出所有开发和设计中可能遇到的的问题点，然后根据问题点找到解决方案，接下来设计架构，根据架构进行开发和检测，我认为一个开发应该是这样子的。<!-- raw HTML omitted -->
+so经过我网上遍寻资料以及整理，我觉得一个秒杀系统遇到的问题有以下几点：</p>
+<ol>
+<li>
+<p>高并发：既然是秒杀系统，那肯定是千军万马在一秒间过独木桥，所以系统如何扛得住高并发的请求；</p>
+</li>
+<li>
+<p>超卖：怎么防止某个商品卖超了；</p>
+</li>
+<li>
+<p>接口防刷：这个就涉及安全了，现在网上到处都是各种连点器，秒杀脚本等等各种奇怪的软件，目的就是为了代替人来抢某个商品，所以遇到这种刷单问题怎么解决；</p>
+</li>
+<li>
+<p>秒杀url可见<!-- raw HTML omitted -->
+这是目前我能想到的一些问题，首先在这之前，我觉得要考虑一个问题，我们现在考虑的是如何把一个秒杀系统维持住的问题，换句话说就是如何实现一个秒杀系统业务的问题，but我们没有考虑一个问题，如果秒杀系统被玩的不好，出现缓存雪崩，缓存击穿，缓存穿透等等情况，巨量的流量直接打在数据库上，数据库服务器boom了，所有的后台服务一起挂掉了。。。我们肯定不能连带其他业务一起挂，所以以上考虑的前提就是先提前分库分表，gg也不能大家一起gg。<!-- raw HTML omitted --></p>
+</li>
+<li>
+<p>接口防刷</p>
+</li>
+</ol>
+<ul>
+<li>面对可见url的问题，因为有些稍微懂一点点技术的老铁都知道在chorme中可以看到前端的接口，所以我们在设计秒杀接口的时候一定要注意秒杀接口的可见性，不能在秒杀系统开始之前就有一堆人用程序来刷接口，所以在秒杀时间开始前，不能拿到秒杀接口，只有秒杀开始时，才返回秒杀地址和验证MD5，用户拿到这两个数据才可以进行秒杀；</li>
+<li>如果多个账号在一个ip地址发出多个请求，我们可以在设计系统时检测ip请求频率，如果超过某个阈值，那么就弹出验证码或者其他东西进行验证；</li>
+<li>当然最多的情况是一个账号发出多个请求，我们可以限定这个用户在发起一次秒杀后，需要等待才可以发起另一次请求，从而减少多个请求的压力，或者使用redis标志位，每个用户的请求都尝试在Redis中插入一个secondKill的标志位，成功插入的才可以执行后续的秒杀逻辑，其他的就被过滤掉。</li>
+<li>当然还有多个账号不同ip发起不同请求，我们可以采用检测账号等级的或者检测性别的骚操作来减少操作。。。</li>
+<li>前端进行优化的话，可以采用验证码，降低用户的请求速度，或者采用限购的策略，抢到一个商品后，不能再抢第二个，或者说将前端静态数据缓存在离用户最近的地方，比如用户浏览器，CDN或者服务器的缓存中。
+2.超卖问题</li>
+<li></li>
+</ul>
+<ol>
+<li>缓存预热
+在秒杀之前，需要将秒杀商品信息提前缓存到Redis中，这么秒杀开始时就直接从Redis读取，也就是缓存预热。</li>
+<li></li>
+</ol>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

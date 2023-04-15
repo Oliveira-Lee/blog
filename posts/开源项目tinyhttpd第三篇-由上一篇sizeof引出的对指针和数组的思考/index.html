@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        开源项目Tinyhttpd第三篇 由上一篇sizeof引出的对指针和数组的思考
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%B8%89%E7%AF%87-%E7%94%B1%E4%B8%8A%E4%B8%80%E7%AF%87sizeof%E5%BC%95%E5%87%BA%E7%9A%84%E5%AF%B9%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84%E7%9A%84%E6%80%9D%E8%80%83/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="开源项目Tinyhttpd第三篇 由上一篇sizeof引出的对指针和数组的思考"/>
+<meta name="twitter:description" content="指针和数组，恕我直言，我从17年第一次接触C&#43;&#43;语言开始，我就认识这俩玩意儿了。。。。但是我提到指针，就跟见了鬼一样，我记得逼乎上谁说的。。C语言最有特色的部分就是指针了，指针的好处就是灵活。。然而坏处就是太TM灵活了！！用这个东西容易搞出很多莫名其妙的bug和令人非常难懂的语句段来，所以很多高级语言比如C#和Java和前端三大语言虽然都源自于C语言，但是不约而同的没有继承指针这一特性。好的废话不多说，让我们来解析这俩玩意儿吧～～～～
+指针 指针是用来表示或者存储一个存储器地址，这个地址的值直接指向存在该地址的对象的值。指针所占内存单元的大小（即其内容）是跟操作系统的地址位数有关，在32位系统中，指针所占的内存单元就是4个字节，在64位系统中，指针所占的内存单元就是8个字节，在16位系统中，指针所占的内存单元就是2个字节。但是指针所占的内存单元的大小与变量类型无关。 首先事先说明&quot;*&ldquo;由三个用途，具体如下： 1） 表示乘法（喜闻乐见）； 2） 表示定义一个指针变量，用这个符号和普通变量分开； 3） 表示获取指针指向的数据，是一种间接的操作。 int a=10; int *p=&amp;a; &#43;&#43;*p;//将p所指向的内容加上1后赋值给y，这个语段等价于&#43;&#43;(*p) *p&#43;&#43;;//和楼上的方法是一样的，等价于(*p)&#43;&#43;,也就是说&#43;&#43;和*的优先级一样的 /////////////////////////////////// /////////////////////////////////// int a=0; int *pa=a; *&amp;a;//等价于*(&amp;a)表示先取a的地址，然后再取这个地址上的数据，说白了还是a。。。。 &amp;*pa;//等价于&amp;(*pa)表示先取pa指向的数据，也就是a的值嘛，然后再取该数据的地址，说白了还是pa。。。。重要的是分析的过程不是结果哈。。。 关于指针的解析问题(基于32位操作系统) int num=97; int *p1=&amp;num; 假设num的地址为0028FF40，换句话说，p1和p2的值就是0028FF40，都不重要哈，但是指针的类型决定了这个指针指向的内存的字节数并且如何解释这些信息，听起来有点绕口，让我们用这个例子来说吧： num的地址如上述所述是0028FF40,所以p1和p2的解析思路如下：
+p1:从地址0028FF40开始,p1是int类型的指针，int在上一节说过占四个字节，因此从前往后数上四个字节，将这四个字节的二进制数解析，结果是97； p2:从地址0028FF40开始，p2是char类型的指针，char占一个字节，然后解析这一个字节的二进制数。。结果是a； 从上述可以知道，同样的地址，如果解析的方式不同，得到的数据可是天壤之别，因为就有了一个奇葩的指针：void类型的指针 void指针只是保存了指针的值，没有类型信息，也就是说，你只知道它的地址，但是你并不知道它的解析方式，换句话说你不知道它指向的数据是什么类型的，所以在使用该指针时严禁解引用！！！！！！！，如果非要用它的话必须要将这种指针进行类型转换才能使用！！！！！ 指针和数组（以下叙述基于32位系统） 数组的定义喜闻乐见，就是一个连续占有一段内存单元的变量集合，它的数组名可以看作是一个指针，代表数组的首地址。例子如下： int a[10]; int *p=a;//和int *p=&amp;a[0]等价,p=p[0]=a[0]=*a,p&#43;i=p[i]=a[i]=*(a&#43;i) p[n]==*(p&#43;n); p[n][m]=*(*(p&#43;n)&#43;m); //sizeof(p)在32位系统中为四个字节。 //sizeof(a)的值为40个字节。在这里数组名a被看作整个数组的代表。 //在上面的p&#43;1并不是指向下一个地址，而是指向下一个元素，在这里要注意哟，这里是有区别的，比如p指向的是int类型的数组首个元素，而p&#43;1大家都知道是指向的是第二个元素，”下一个地址“就是p往后挪了一个字节，“下一个元素”就是p往后挪了四个字节（如果数组是int类型的）或者往后挪了一个字节（如果数组是char类型的）。综上所述，*p是第一个元素的内容，*(p&#43;1)是第二个元素的内容，p&#43;1是第二个元素的地址。 令人恶心的数组指针和指针数组 这个东西还是很难记住的。。。。还是多看多记吧。。。贼难受呀～～～～ nt *p[10];//指针数组，数组里有十个元素，每个元素都是int型的指针 //[]的优先级比*要搞，p先与[]结合，是一个数组，然后int*修饰数组的内容，所以这是10个指向int类型的指针。 int (*p)[10];//数组指针，()的优先级比[]高，*和p构成一个指针的定义，int修饰的是数组的内容，即是每个元素，数组在这里没有名字，是一个匿名数组，所以p是一个指针，指向了一个匿名的包含int类型的数组。可以理解为int(*)[10]p "/>
+
+
+
+  
+  <meta property="og:title" content="开源项目Tinyhttpd第三篇 由上一篇sizeof引出的对指针和数组的思考" />
+<meta property="og:description" content="指针和数组，恕我直言，我从17年第一次接触C&#43;&#43;语言开始，我就认识这俩玩意儿了。。。。但是我提到指针，就跟见了鬼一样，我记得逼乎上谁说的。。C语言最有特色的部分就是指针了，指针的好处就是灵活。。然而坏处就是太TM灵活了！！用这个东西容易搞出很多莫名其妙的bug和令人非常难懂的语句段来，所以很多高级语言比如C#和Java和前端三大语言虽然都源自于C语言，但是不约而同的没有继承指针这一特性。好的废话不多说，让我们来解析这俩玩意儿吧～～～～
+指针 指针是用来表示或者存储一个存储器地址，这个地址的值直接指向存在该地址的对象的值。指针所占内存单元的大小（即其内容）是跟操作系统的地址位数有关，在32位系统中，指针所占的内存单元就是4个字节，在64位系统中，指针所占的内存单元就是8个字节，在16位系统中，指针所占的内存单元就是2个字节。但是指针所占的内存单元的大小与变量类型无关。 首先事先说明&quot;*&ldquo;由三个用途，具体如下： 1） 表示乘法（喜闻乐见）； 2） 表示定义一个指针变量，用这个符号和普通变量分开； 3） 表示获取指针指向的数据，是一种间接的操作。 int a=10; int *p=&amp;a; &#43;&#43;*p;//将p所指向的内容加上1后赋值给y，这个语段等价于&#43;&#43;(*p) *p&#43;&#43;;//和楼上的方法是一样的，等价于(*p)&#43;&#43;,也就是说&#43;&#43;和*的优先级一样的 /////////////////////////////////// /////////////////////////////////// int a=0; int *pa=a; *&amp;a;//等价于*(&amp;a)表示先取a的地址，然后再取这个地址上的数据，说白了还是a。。。。 &amp;*pa;//等价于&amp;(*pa)表示先取pa指向的数据，也就是a的值嘛，然后再取该数据的地址，说白了还是pa。。。。重要的是分析的过程不是结果哈。。。 关于指针的解析问题(基于32位操作系统) int num=97; int *p1=&amp;num; 假设num的地址为0028FF40，换句话说，p1和p2的值就是0028FF40，都不重要哈，但是指针的类型决定了这个指针指向的内存的字节数并且如何解释这些信息，听起来有点绕口，让我们用这个例子来说吧： num的地址如上述所述是0028FF40,所以p1和p2的解析思路如下：
+p1:从地址0028FF40开始,p1是int类型的指针，int在上一节说过占四个字节，因此从前往后数上四个字节，将这四个字节的二进制数解析，结果是97； p2:从地址0028FF40开始，p2是char类型的指针，char占一个字节，然后解析这一个字节的二进制数。。结果是a； 从上述可以知道，同样的地址，如果解析的方式不同，得到的数据可是天壤之别，因为就有了一个奇葩的指针：void类型的指针 void指针只是保存了指针的值，没有类型信息，也就是说，你只知道它的地址，但是你并不知道它的解析方式，换句话说你不知道它指向的数据是什么类型的，所以在使用该指针时严禁解引用！！！！！！！，如果非要用它的话必须要将这种指针进行类型转换才能使用！！！！！ 指针和数组（以下叙述基于32位系统） 数组的定义喜闻乐见，就是一个连续占有一段内存单元的变量集合，它的数组名可以看作是一个指针，代表数组的首地址。例子如下： int a[10]; int *p=a;//和int *p=&amp;a[0]等价,p=p[0]=a[0]=*a,p&#43;i=p[i]=a[i]=*(a&#43;i) p[n]==*(p&#43;n); p[n][m]=*(*(p&#43;n)&#43;m); //sizeof(p)在32位系统中为四个字节。 //sizeof(a)的值为40个字节。在这里数组名a被看作整个数组的代表。 //在上面的p&#43;1并不是指向下一个地址，而是指向下一个元素，在这里要注意哟，这里是有区别的，比如p指向的是int类型的数组首个元素，而p&#43;1大家都知道是指向的是第二个元素，”下一个地址“就是p往后挪了一个字节，“下一个元素”就是p往后挪了四个字节（如果数组是int类型的）或者往后挪了一个字节（如果数组是char类型的）。综上所述，*p是第一个元素的内容，*(p&#43;1)是第二个元素的内容，p&#43;1是第二个元素的地址。 令人恶心的数组指针和指针数组 这个东西还是很难记住的。。。。还是多看多记吧。。。贼难受呀～～～～ nt *p[10];//指针数组，数组里有十个元素，每个元素都是int型的指针 //[]的优先级比*要搞，p先与[]结合，是一个数组，然后int*修饰数组的内容，所以这是10个指向int类型的指针。 int (*p)[10];//数组指针，()的优先级比[]高，*和p构成一个指针的定义，int修饰的是数组的内容，即是每个元素，数组在这里没有名字，是一个匿名数组，所以p是一个指针，指向了一个匿名的包含int类型的数组。可以理解为int(*)[10]p " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%B8%89%E7%AF%87-%E7%94%B1%E4%B8%8A%E4%B8%80%E7%AF%87sizeof%E5%BC%95%E5%87%BA%E7%9A%84%E5%AF%B9%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84%E7%9A%84%E6%80%9D%E8%80%83/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-05-15T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "开源项目Tinyhttpd第三篇 由上一篇sizeof引出的对指针和数组的思考",
+        "headline": "开源项目Tinyhttpd第三篇 由上一篇sizeof引出的对指针和数组的思考",
+        "alternativeHeadline": "",
+        "description": "
+      
+        指针和数组，恕我直言，我从17年第一次接触C\u002b\u002b语言开始，我就认识这俩玩意儿了。。。。但是我提到指针，就跟见了鬼一样，我记得逼乎上谁说的。。C语言最有特色的部分就是指针了，指针的好处就是灵活。。然而坏处就是太TM灵活了！！用这个东西容易搞出很多莫名其妙的bug和令人非常难懂的语句段来，所以很多高级语言比如C#和Java和前端三大语言虽然都源自于C语言，但是不约而同的没有继承指针这一特性。好的废话不多说，让我们来解析这俩玩意儿吧～～～～\n指针 指针是用来表示或者存储一个存储器地址，这个地址的值直接指向存在该地址的对象的值。指针所占内存单元的大小（即其内容）是跟操作系统的地址位数有关，在32位系统中，指针所占的内存单元就是4个字节，在64位系统中，指针所占的内存单元就是8个字节，在16位系统中，指针所占的内存单元就是2个字节。但是指针所占的内存单元的大小与变量类型无关。 首先事先说明\u0026quot;*\u0026ldquo;由三个用途，具体如下： 1） 表示乘法（喜闻乐见）； 2） 表示定义一个指针变量，用这个符号和普通变量分开； 3） 表示获取指针指向的数据，是一种间接的操作。 int a=10; int *p=\u0026amp;a; \u002b\u002b*p;\/\/将p所指向的内容加上1后赋值给y，这个语段等价于\u002b\u002b(*p) *p\u002b\u002b;\/\/和楼上的方法是一样的，等价于(*p)\u002b\u002b,也就是说\u002b\u002b和*的优先级一样的 \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/ int a=0; int *pa=a; *\u0026amp;a;\/\/等价于*(\u0026amp;a)表示先取a的地址，然后再取这个地址上的数据，说白了还是a。。。。 \u0026amp;*pa;\/\/等价于\u0026amp;(*pa)表示先取pa指向的数据，也就是a的值嘛，然后再取该数据的地址，说白了还是pa。。。。重要的是分析的过程不是结果哈。。。 关于指针的解析问题(基于32位操作系统) int num=97; int *p1=\u0026amp;num; 假设num的地址为0028FF40，换句话说，p1和p2的值就是0028FF40，都不重要哈，但是指针的类型决定了这个指针指向的内存的字节数并且如何解释这些信息，听起来有点绕口，让我们用这个例子来说吧： num的地址如上述所述是0028FF40,所以p1和p2的解析思路如下：\np1:从地址0028FF40开始,p1是int类型的指针，int在上一节说过占四个字节，因此从前往后数上四个字节，将这四个字节的二进制数解析，结果是\u000897； p2:从地址0028FF40开始，p2是char类型的指针，char占一个字节，然后解析这一个字节的二进制数。。结果是a； 从上述可以知道，同样的地址，如果解析的方式不同，得到的数据可是天壤之别，因为就有了一个奇葩的指针：void类型的指针 void指针只是保存了指针的值，没有类型信息，也就是说，你只知道它的地址，但是你并不知道它的解析方式，换句话说你不知道它指向的数据是什么类型的，所以在使用该指针时严禁解引用！！！！！！！，如果非要用它的话必须要将这种指针进行类型转换才能使用！！！！！ 指针和数组（以下叙述基于32位系统） 数组的定义喜闻乐见，就是一个连续占有一段内存单元的变量集合，它的数组名可以看作是一个指针，代表数组的首地址。例子如下： int a[10]; int *p=a;\/\/和int *p=\u0026amp;a[0]等价,p=p[0]=a[0]=*a,p\u002bi=p[i]=a[i]=*(a\u002bi) p[n]==*(p\u002bn); p[n][m]=*(*(p\u002bn)\u002bm); \/\/sizeof(p)在32位系统中为四个字节。 \/\/sizeof(a)的值为40个字节。在这里数组名a被看作整个数组的代表。 \/\/在上面的p\u002b1并不是指向下一个地址，而是指向下一个元素，在这里要注意哟，这里是有区别的，比如p指向的是int类型的数组首个元素，而p\u002b1大家都知道是指向的是第二个元素，”下一个地址“就是p往后挪了一个字节，“下一个元素”就是p往后挪了四个字节（如果数组是int类型的）或者往后挪了一个字节（如果数组是char类型的）。综上所述，*p是第一个元素的内容，*(p\u002b1)是第二个元素的内容，p\u002b1是第二个元素的地址。 令人恶心的数组指针和指针数组 这个东西还是很难记住的。。。。还是多看多记吧。。。贼难受呀～～～～ nt *p[10];\/\/指针数组，数组里有十个元素，每个元素都是int型的指针 \/\/[]的优先级比*要搞，p先与[]结合，是一个数组，然后int*修饰数组的内容，所以这是10个指向int类型的指针。 int (*p)[10];\/\/数组指针，()的优先级比[]高，*和p构成一个指针的定义，int修饰的是数组的内容，即是每个元素，数组在这里没有名字，是一个匿名数组，所以p是一个指针，指向了一个匿名的包含int类型的数组。可以理解为int(*)[10]p 
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%B8%89%E7%AF%87-%E7%94%B1%E4%B8%8A%E4%B8%80%E7%AF%87sizeof%E5%BC%95%E5%87%BA%E7%9A%84%E5%AF%B9%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84%E7%9A%84%E6%80%9D%E8%80%83\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2020",
+        "dateCreated": "2020-05-15T00:00:00.00Z",
+        "datePublished": "2020-05-15T00:00:00.00Z",
+        "dateModified": "2020-05-15T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%B8%89%E7%AF%87-%E7%94%B1%E4%B8%8A%E4%B8%80%E7%AF%87sizeof%E5%BC%95%E5%87%BA%E7%9A%84%E5%AF%B9%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84%E7%9A%84%E6%80%9D%E8%80%83\/",
+        "wordCount" : "54",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>开源项目Tinyhttpd第三篇 由上一篇sizeof引出的对指针和数组的思考</h1>
+      <p>指针和数组，恕我直言，我从17年第一次接触C++语言开始，我就认识这俩玩意儿了。。。。但是我提到指针，就跟见了鬼一样，我记得逼乎上谁说的。。C语言最有特色的部分就是指针了，指针的好处就是灵活。。然而坏处就是太TM灵活了！！用这个东西容易搞出很多莫名其妙的bug和令人非常难懂的语句段来，所以很多高级语言比如C#和Java和前端三大语言虽然都源自于C语言，但是不约而同的没有继承指针这一特性。好的废话不多说，让我们来解析这俩玩意儿吧～～～～<!-- raw HTML omitted --></p>
+<ol>
+<li>指针 <!-- raw HTML omitted -->
+指针是用来表示或者存储一个存储器地址，这个地址的值直接指向存在该地址的对象的值。指针所占内存单元的大小（即其内容）是跟操作系统的地址位数有关，在32位系统中，指针所占的内存单元就是4个字节，在64位系统中，指针所占的内存单元就是8个字节，在16位系统中，指针所占的内存单元就是2个字节。但是指针所占的内存单元的大小与变量类型无关。</li>
+</ol>
+<ul>
+<li>首先事先说明&quot;*&ldquo;由三个用途，具体如下：
+1） 表示乘法（喜闻乐见）；<!-- raw HTML omitted -->
+2） 表示定义一个指针变量，用这个符号和普通变量分开；<!-- raw HTML omitted -->
+3） 表示获取指针指向的数据，是一种间接的操作。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>p<span style="color:#f92672">=&amp;</span>a;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">++*</span>p;<span style="color:#75715e">//将p所指向的内容加上1后赋值给y，这个语段等价于++(*p)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">*</span>p<span style="color:#f92672">++</span>;<span style="color:#75715e">//和楼上的方法是一样的，等价于(*p)++,也就是说++和*的优先级一样的
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">///////////////////////////////////
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">///////////////////////////////////
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>pa<span style="color:#f92672">=</span>a;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*&amp;</span>a;<span style="color:#75715e">//等价于*(&amp;a)表示先取a的地址，然后再取这个地址上的数据，说白了还是a。。。。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">&amp;*</span>pa;<span style="color:#75715e">//等价于&amp;(*pa)表示先取pa指向的数据，也就是a的值嘛，然后再取该数据的地址，说白了还是pa。。。。重要的是分析的过程不是结果哈。。。
+</span></span></span></code></pre></div><ul>
+<li>关于指针的解析问题(基于32位操作系统)</li>
+</ul>
+<pre tabindex="0"><code>int num=97;
+int *p1=&amp;num;
+</code></pre><p>假设num的地址为0028FF40，换句话说，p1和p2的值就是0028FF40，都不重要哈，但是指针的类型决定了这个指针指向的内存的字节数并且如何解释这些信息，听起来有点绕口，让我们用这个例子来说吧：<!-- raw HTML omitted -->
+num的地址如上述所述是0028FF40,所以p1和p2的解析思路如下：<!-- raw HTML omitted --></p>
+<ul>
+<li>p1:从地址0028FF40开始,p1是int类型的指针，int在上一节说过占四个字节，因此从前往后数上四个字节，将这四个字节的二进制数解析，结果是97；</li>
+<li>p2:从地址0028FF40开始，p2是char类型的指针，char占一个字节，然后解析这一个字节的二进制数。。结果是a；<!-- raw HTML omitted -->
+从上述可以知道，同样的地址，如果解析的方式不同，得到的数据可是天壤之别，因为就有了一个奇葩的指针：void类型的指针<!-- raw HTML omitted -->
+void指针只是保存了指针的值，没有类型信息，也就是说，你只知道它的地址，但是你并不知道它的解析方式，换句话说你不知道它指向的数据是什么类型的，所以在使用该指针时严禁解引用！！！！！！！，如果非要用它的话必须要将这种指针进行类型转换才能使用！！！！！<!-- raw HTML omitted --></li>
+</ul>
+<ol>
+<li>指针和数组（以下叙述基于32位系统）<!-- raw HTML omitted -->
+数组的定义喜闻乐见，就是一个连续占有一段内存单元的变量集合，它的数组名可以看作是一个指针，代表数组的首地址。例子如下：<!-- raw HTML omitted --></li>
+</ol>
+<pre tabindex="0"><code>int a[10];
+int *p=a;//和int *p=&amp;a[0]等价,p=p[0]=a[0]=*a,p+i=p[i]=a[i]=*(a+i)
+p[n]==*(p+n);
+p[n][m]=*(*(p+n)+m);
+//sizeof(p)在32位系统中为四个字节。
+//sizeof(a)的值为40个字节。在这里数组名a被看作整个数组的代表。
+//在上面的p+1并不是指向下一个地址，而是指向下一个元素，在这里要注意哟，这里是有区别的，比如p指向的是int类型的数组首个元素，而p+1大家都知道是指向的是第二个元素，”下一个地址“就是p往后挪了一个字节，“下一个元素”就是p往后挪了四个字节（如果数组是int类型的）或者往后挪了一个字节（如果数组是char类型的）。综上所述，*p是第一个元素的内容，*(p+1)是第二个元素的内容，p+1是第二个元素的地址。
+</code></pre><ol start="2">
+<li>令人恶心的数组指针和指针数组
+这个东西还是很难记住的。。。。还是多看多记吧。。。贼难受呀～～～～</li>
+</ol>
+<pre tabindex="0"><code>nt *p[10];//指针数组，数组里有十个元素，每个元素都是int型的指针
+//[]的优先级比*要搞，p先与[]结合，是一个数组，然后int*修饰数组的内容，所以这是10个指向int类型的指针。
+int (*p)[10];//数组指针，()的优先级比[]高，*和p构成一个指针的定义，int修饰的是数组的内容，即是每个元素，数组在这里没有名字，是一个匿名数组，所以p是一个指针，指向了一个匿名的包含int类型的数组。可以理解为int(*)[10]p
+</code></pre></div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

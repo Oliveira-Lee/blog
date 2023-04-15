@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        线程实现和创建方式
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9512/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="线程实现和创建方式"/>
+<meta name="twitter:description" content="这段我也被问到过，我觉得还是要自己学习一下比较好，而且讲真，自己在使用过程中对这部分掌握的不是很熟，所以在这里学习记录一下
+继承Thread类 在Java中有个类就叫做Thread类，这个类其实从根上来说也是继承了Runnable接口的一个实例，在这个类中启动线程的方法，就是通过Thread的start方法，但是要在这里注意一下，start方法其实是个native方法。还记得前面帖子中JVM中关于navite方法的东西吗，好吧其实我也忘了，，， 在JVM中 其实有个东西叫做本地方法栈 本地方法就是JVM为了运行Native方法的空间，因为Native方法很多的话都是用c实现的，所以他又被称为C栈，他跟Java虚拟机栈差不多，只不过本地方法栈是描述本地方法运行过程的内存模型。
+在本地方法被执行时，在本地方法栈会创建一个栈帧，用于存放该方法的局部变量表，操作数栈，动态链接，方法出口信息等。
+方法执行结束后，相应的栈帧也会出栈，并且释放内存空间，也会抛出StackOberFlowError和OutOfMemoryError异常。 注意，在HotSpot VM中就直接把本地方法栈和虚拟机栈直接合二为一了。
+如果Java虚拟机本身不支持Native方法或者本身不依赖于传统栈，那么就可以不提供本地方法栈，如果支持本地方法栈，那么这个栈一般会在线程创建的时候按线程分配。
+在这里的话啥是本地方法（Native Method）呢，其实简单来说Native Method方法就是一个java调用非Java语言实现方法的接口，这个方法的方法体其实大部分都是非Java实现的，比如C或者其他语言实现，很多语言中其实都有，比如C&#43;&#43;中调用C函数的话一般会在文件头那里写上 extern “c”告知GCC编译器去处理C函数时按照C函数去处理。
+比如哈 public class IHaveNatives { native public void Native1( int x ) ; native static public long Native2() ; native synchronized private float Native3( Object o ) ; native void Native4( int[] ary ) throws Exception ; } 这些方法的声明就是一些非Java方法在Java中的签名状态。
+其实natvie这个关键字也可以与其他Java关键字连用，但是肯定不能和abstract一起连用，因为abstract在修饰方法的时候说明该方法没有方法体，但是native修饰的方法肯定是有方法体的，只是这个方法的方法体是由非Java方法实现的"/>
+
+
+
+  
+  <meta property="og:title" content="线程实现和创建方式" />
+<meta property="og:description" content="这段我也被问到过，我觉得还是要自己学习一下比较好，而且讲真，自己在使用过程中对这部分掌握的不是很熟，所以在这里学习记录一下
+继承Thread类 在Java中有个类就叫做Thread类，这个类其实从根上来说也是继承了Runnable接口的一个实例，在这个类中启动线程的方法，就是通过Thread的start方法，但是要在这里注意一下，start方法其实是个native方法。还记得前面帖子中JVM中关于navite方法的东西吗，好吧其实我也忘了，，， 在JVM中 其实有个东西叫做本地方法栈 本地方法就是JVM为了运行Native方法的空间，因为Native方法很多的话都是用c实现的，所以他又被称为C栈，他跟Java虚拟机栈差不多，只不过本地方法栈是描述本地方法运行过程的内存模型。
+在本地方法被执行时，在本地方法栈会创建一个栈帧，用于存放该方法的局部变量表，操作数栈，动态链接，方法出口信息等。
+方法执行结束后，相应的栈帧也会出栈，并且释放内存空间，也会抛出StackOberFlowError和OutOfMemoryError异常。 注意，在HotSpot VM中就直接把本地方法栈和虚拟机栈直接合二为一了。
+如果Java虚拟机本身不支持Native方法或者本身不依赖于传统栈，那么就可以不提供本地方法栈，如果支持本地方法栈，那么这个栈一般会在线程创建的时候按线程分配。
+在这里的话啥是本地方法（Native Method）呢，其实简单来说Native Method方法就是一个java调用非Java语言实现方法的接口，这个方法的方法体其实大部分都是非Java实现的，比如C或者其他语言实现，很多语言中其实都有，比如C&#43;&#43;中调用C函数的话一般会在文件头那里写上 extern “c”告知GCC编译器去处理C函数时按照C函数去处理。
+比如哈 public class IHaveNatives { native public void Native1( int x ) ; native static public long Native2() ; native synchronized private float Native3( Object o ) ; native void Native4( int[] ary ) throws Exception ; } 这些方法的声明就是一些非Java方法在Java中的签名状态。
+其实natvie这个关键字也可以与其他Java关键字连用，但是肯定不能和abstract一起连用，因为abstract在修饰方法的时候说明该方法没有方法体，但是native修饰的方法肯定是有方法体的，只是这个方法的方法体是由非Java方法实现的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9512/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-11-01T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "线程实现和创建方式",
+        "headline": "线程实现和创建方式",
+        "alternativeHeadline": "",
+        "description": "
+      
+        这段我也被问到过，我觉得还是要自己学习一下比较好，而且讲真，自己在使用过程中对这部分掌握的不是很熟，所以在这里学习记录一下\n继承Thread类 在Java中有个类就叫做Thread类，这个类其实从根上来说也是继承了Runnable接口的一个实例，在这个类中启动线程的方法，就是通过Thread的start方法，但是要在这里注意一下，start方法其实是个native方法。还记得前面帖子中JVM中关于navite方法的东西吗，好吧其实我也忘了，，， 在JVM中 其实有个东西叫做本地方法栈 本地方法就是JVM为了运行Native方法的空间，因为Native方法很多的话都是用c实现的，所以他又被称为C栈，他跟Java虚拟机栈差不多，只不过本地方法栈是描述本地方法运行过程的内存模型。\n在本地方法被执行时，在本地方法栈会创建一个栈帧，用于存放该方法的局部变量表，操作数栈，动态链接，方法出口信息等。\n方法执行结束后，相应的栈帧也会出栈，并且释放内存空间，也会抛出StackOberFlowError和OutOfMemoryError异常。 注意，在HotSpot VM中就直接把本地方法栈和虚拟机栈直接合二为一了。\n如果Java虚拟机本身不支持Native方法或者本身不依赖于传统栈，那么就可以不提供本地方法栈，如果支持本地方法栈，那么这个栈一般会在线程创建的时候按线程分配。\n在这里的话啥是本地方法（Native Method）呢，其实简单来说Native Method方法就是一个java调用非Java语言实现方法的接口，这个方法的方法体其实大部分都是非Java实现的，比如C或者其他语言实现，很多语言中其实都有，比如C\u002b\u002b中调用C函数的话一般会在文件头那里写上 extern “c”告知GCC编译器去处理C函数时按照C函数去处理。\n比如哈 public class IHaveNatives { native public void Native1( int x ) ; native static public long Native2() ; native synchronized private float Native3( Object o ) ; native void Native4( int[] ary ) throws Exception ; } 这些方法的声明就是一些非Java方法在Java中的签名状态。\n其实natvie这个关键字也可以与其他Java关键字连用，但是肯定不能和abstract一起连用，因为abstract在修饰方法的时候说明该方法没有方法体，但是native修饰的方法肯定是有方法体的，只是这个方法的方法体是由非Java方法实现的
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9512\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-11-01T00:00:00.00Z",
+        "datePublished": "2021-11-01T00:00:00.00Z",
+        "dateModified": "2021-11-01T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9512\/",
+        "wordCount" : "56",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>线程实现和创建方式</h1>
+      <p>这段我也被问到过，我觉得还是要自己学习一下比较好，而且讲真，自己在使用过程中对这部分掌握的不是很熟，所以在这里学习记录一下</p>
+<ol>
+<li>继承Thread类
+在Java中有个类就叫做Thread类，这个类其实从根上来说也是继承了Runnable接口的一个实例，在这个类中启动线程的方法，就是通过Thread的start方法，但是要在这里注意一下，start方法其实是个native方法。还记得前面帖子中JVM中关于navite方法的东西吗，好吧其实我也忘了，，， <br>
+在JVM中 其实有个东西叫做本地方法栈 本地方法就是JVM为了运行Native方法的空间，因为Native方法很多的话都是用c实现的，所以他又被称为C栈，他跟Java虚拟机栈差不多，只不过本地方法栈是描述本地方法运行过程的内存模型。<br>
+在本地方法被执行时，在本地方法栈会创建一个栈帧，用于存放该方法的局部变量表，操作数栈，动态链接，方法出口信息等。<br>
+方法执行结束后，相应的栈帧也会出栈，并且释放内存空间，也会抛出StackOberFlowError和OutOfMemoryError异常。 <br>
+注意，在HotSpot VM中就直接把本地方法栈和虚拟机栈直接合二为一了。<br>
+如果Java虚拟机本身不支持Native方法或者本身不依赖于传统栈，那么就可以不提供本地方法栈，如果支持本地方法栈，那么这个栈一般会在线程创建的时候按线程分配。<br>
+在这里的话啥是本地方法（Native Method）呢，其实简单来说Native Method方法就是一个java调用非Java语言实现方法的接口，这个方法的方法体其实大部分都是非Java实现的，比如C或者其他语言实现，很多语言中其实都有，比如C++中调用C函数的话一般会在文件头那里写上 extern “c”告知GCC编译器去处理C函数时按照C函数去处理。<br>
+比如哈</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Java" data-lang="Java"><span style="display:flex;"><span>       <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">IHaveNatives</span> 
+</span></span><span style="display:flex;"><span>       <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">native</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Native1</span><span style="color:#f92672">(</span> <span style="color:#66d9ef">int</span> x <span style="color:#f92672">)</span> <span style="color:#f92672">;</span> 
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">native</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">long</span> <span style="color:#a6e22e">Native2</span><span style="color:#f92672">()</span> <span style="color:#f92672">;</span> 
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">native</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">float</span> <span style="color:#a6e22e">Native3</span><span style="color:#f92672">(</span> Object o <span style="color:#f92672">)</span> <span style="color:#f92672">;</span> 
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">native</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Native4</span><span style="color:#f92672">(</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> ary <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">;</span> 
+</span></span><span style="display:flex;"><span>       <span style="color:#f92672">}</span> 
+</span></span></code></pre></div><p>这些方法的声明就是一些非Java方法在Java中的签名状态。<br>
+其实natvie这个关键字也可以与其他Java关键字连用，但是肯定不能和abstract一起连用，因为abstract在修饰方法的时候说明该方法没有方法体，但是native修饰的方法肯定是有方法体的，只是这个方法的方法体是由非Java方法实现的</p>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

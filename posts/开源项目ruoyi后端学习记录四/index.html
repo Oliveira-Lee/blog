@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        后端学习笔记四 Map的几个实现类杂谈
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E5%9B%9B/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="后端学习笔记四 Map的几个实现类杂谈"/>
+<meta name="twitter:description" content="Ruoyi-Vue 说到Map，不得不提的就是Java中的HashMap了，这个东西平时在写代码的时候是经常被使用的，这个东西的底层是由数组加上链表实现的，但是大家都知道的是HashMap是线程不安全的，因为多个线程对同一个HashMap做put操作的话，可能在某些情况下会有两个或者多个线程同时进行rehash操作，故而导致循环链表的出现，一旦出现就会死循环，cpu使用率会逐渐到达100%。 所以为了使用线程安全，又有了一个新的Map实现类：HashTable，说到多线程，肯定就会有锁的概念，为了实现HashTable的多线程同步，HashTable的底层实现了synchronized的锁结构，但是它效率比HashMap的效率要低一些，因为在多线程的情况下，HashTable会把整个结构全部锁住，为了解决遮盖1问题，在Jdk5中提出了ConcurrentHashMap这个新的数据结构。 这个ConcurrentHashMap提出的目的就是为了解决HashTable的低效率问题，使用了分段锁这个比较细粒度的锁，ConcurrentHashMap底层实现还是数组和链表，但是底层存储数据是一段一段的，每个段都有类似数组加上链表的结构，在进行get，put和remove操作时只锁住要用的段，但是以后每个段越来越大以后，分段锁的性能还是会下降的，但是在Jdk1.8以后，ConcurrentHashMap的底层实现变成了数组，链表/红黑树的形式。在链表中的元素个数超过默认的8个，数组的大小超过64后链表就变成红黑树了（想起这个树就脑壳痛），而且弃用分段锁，并且使用synchronized&#43;CAS操作，目的就是为了降低锁的力度，因为synchronized是JVM支持的，在运行时会进行锁粗化，锁消除，锁自选等等操作。"/>
+
+
+
+  
+  <meta property="og:title" content="后端学习笔记四 Map的几个实现类杂谈" />
+<meta property="og:description" content="Ruoyi-Vue 说到Map，不得不提的就是Java中的HashMap了，这个东西平时在写代码的时候是经常被使用的，这个东西的底层是由数组加上链表实现的，但是大家都知道的是HashMap是线程不安全的，因为多个线程对同一个HashMap做put操作的话，可能在某些情况下会有两个或者多个线程同时进行rehash操作，故而导致循环链表的出现，一旦出现就会死循环，cpu使用率会逐渐到达100%。 所以为了使用线程安全，又有了一个新的Map实现类：HashTable，说到多线程，肯定就会有锁的概念，为了实现HashTable的多线程同步，HashTable的底层实现了synchronized的锁结构，但是它效率比HashMap的效率要低一些，因为在多线程的情况下，HashTable会把整个结构全部锁住，为了解决遮盖1问题，在Jdk5中提出了ConcurrentHashMap这个新的数据结构。 这个ConcurrentHashMap提出的目的就是为了解决HashTable的低效率问题，使用了分段锁这个比较细粒度的锁，ConcurrentHashMap底层实现还是数组和链表，但是底层存储数据是一段一段的，每个段都有类似数组加上链表的结构，在进行get，put和remove操作时只锁住要用的段，但是以后每个段越来越大以后，分段锁的性能还是会下降的，但是在Jdk1.8以后，ConcurrentHashMap的底层实现变成了数组，链表/红黑树的形式。在链表中的元素个数超过默认的8个，数组的大小超过64后链表就变成红黑树了（想起这个树就脑壳痛），而且弃用分段锁，并且使用synchronized&#43;CAS操作，目的就是为了降低锁的力度，因为synchronized是JVM支持的，在运行时会进行锁粗化，锁消除，锁自选等等操作。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E5%9B%9B/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-11-25T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "后端学习笔记四 Map的几个实现类杂谈",
+        "headline": "后端学习笔记四 Map的几个实现类杂谈",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Ruoyi-Vue 说到Map，不得不提的就是Java中的HashMap了，这个东西平时在写代码的时候是经常被使用的，这个东西的底层是由数组加上链表实现的，但是大家都知道的是HashMap是线程不安全的，因为多个线程对同一个HashMap做put操作的话，可能在某些情况下会有两个或者多个线程同时进行rehash操作，故而导致循环链表的出现，一旦出现就会死循环，cpu使用率会逐渐到达100%。 所以为了使用线程安全，又有了一个新的Map实现类：HashTable，说到多线程，肯定就会有锁的概念，为了实现HashTable的多线程同步，HashTable的底层实现了synchronized的锁结构，但是它效率比HashMap的效率要低一些，因为在多线程的情况下，HashTable会把整个结构全部锁住，为了解决遮盖1问题，在Jdk5中提出了ConcurrentHashMap这个新的数据结构。 这个ConcurrentHashMap提出的目的就是为了解决HashTable的低效率问题，使用了分段锁这个比较细粒度的锁，ConcurrentHashMap底层实现还是数组和链表，但是底层存储数据是一段一段的，每个段都有类似数组加上链表的结构，在进行get，put和remove操作时只锁住要用的段，但是以后每个段越来越大以后，分段锁的性能还是会下降的，但是在Jdk1.8以后，ConcurrentHashMap的底层实现变成了数组，链表\/红黑树的形式。在链表中的元素个数超过默认的8个，数组的大小超过64后链表就变成红黑树了（想起这个树就脑壳痛），而且弃用分段锁，并且使用synchronized\u002bCAS操作，目的就是为了降低锁的力度，因为synchronized是JVM支持的，在运行时会进行锁粗化，锁消除，锁自选等等操作。
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E5%9B%9B\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-11-25T00:00:00.00Z",
+        "datePublished": "2021-11-25T00:00:00.00Z",
+        "dateModified": "2021-11-25T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E5%9B%9B\/",
+        "wordCount" : "4",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>后端学习笔记四 Map的几个实现类杂谈</h1>
+      <p><a href="https://github.com/yangzongzhuan/RuoYi-Vue">Ruoyi-Vue</a><!-- raw HTML omitted -->
+说到Map，不得不提的就是Java中的HashMap了，这个东西平时在写代码的时候是经常被使用的，这个东西的底层是由数组加上链表实现的，但是大家都知道的是HashMap是线程不安全的，因为多个线程对同一个HashMap做put操作的话，可能在某些情况下会有两个或者多个线程同时进行rehash操作，故而导致循环链表的出现，一旦出现就会死循环，cpu使用率会逐渐到达100%。<!-- raw HTML omitted -->
+所以为了使用线程安全，又有了一个新的Map实现类：HashTable，说到多线程，肯定就会有锁的概念，为了实现HashTable的多线程同步，HashTable的底层实现了synchronized的锁结构，但是它效率比HashMap的效率要低一些，因为在多线程的情况下，HashTable会把整个结构全部锁住，为了解决遮盖1问题，在Jdk5中提出了ConcurrentHashMap这个新的数据结构。<!-- raw HTML omitted -->
+这个ConcurrentHashMap提出的目的就是为了解决HashTable的低效率问题，使用了分段锁这个比较细粒度的锁，ConcurrentHashMap底层实现还是数组和链表，但是底层存储数据是一段一段的，每个段都有类似数组加上链表的结构，在进行get，put和remove操作时只锁住要用的段，但是以后每个段越来越大以后，分段锁的性能还是会下降的，但是在Jdk1.8以后，ConcurrentHashMap的底层实现变成了数组，链表/红黑树的形式。在链表中的元素个数超过默认的8个，数组的大小超过64后链表就变成红黑树了（想起这个树就脑壳痛），而且弃用分段锁，并且使用synchronized+CAS操作，目的就是为了降低锁的力度，因为synchronized是JVM支持的，在运行时会进行锁粗化，锁消除，锁自选等等操作。<!-- raw HTML omitted --></p>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>

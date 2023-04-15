@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><head>
+  <title>
+    Junshuo Li
+        |
+        开源项目Tinyhttpd第二篇 详解sizeof关键字
+      
+
+    
+
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Junshuo Li" />
+  <meta
+    name="description"
+    content="Talk is fucking cheap. Show me the code."
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.afcf7a74c48633d6afc6447bf52d6af2c1bbc24b0cb0ce6d834cc98f49bfba77.css"
+      integrity="sha256-r896dMSGM9avxkR79S1q8sG7wksMsM5tg0zJj0m/unc="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%BA%8C%E7%AF%87-%E8%AF%A6%E8%A7%A3sizeof%E5%85%B3%E9%94%AE%E5%AD%97/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="开源项目Tinyhttpd第二篇 详解sizeof关键字"/>
+<meta name="twitter:description" content="Tinyhttpd 接上一篇文章，接下来我们要注意的关键字是sizeof。sizeof在我的印象里都是一个用来返回某个数据类型所占的内存，然而前段时间被人家问到了基本用法，都忘了。。。。所以写出来整理一下。 1.普通用法
+sizeof(type)/sizeof var_name sizeof是以字节形式给出了所操作数据的大小。前一种的格式都喜闻乐见，而后一种对我来说很少见，当用这种格式时主要是用来操作变量和对象，但是如果是操作一个类型必须要添加括号。但是由这里也可以看出来sizeof并不是函数！！！！因为一个正常的函数是需要加括号的。 而且sizeof也不是一种操作符！！！！，为什么这么说呢，可以看下面的例子： int a=0; cout&lt;&lt;sizeof(a=4)&lt;&lt;endl; cout&lt;&lt;a&lt;&lt;endl; 这段程序的输出结果为：
+4 0 在当初在其他大佬的博客上看到这段程序时，我发现这个东西真的好迷，因为我认为答案是4和3，后来把sizeof看作是一种编译预处理就想的过去了，因为显然在sizeof处理阶段显然括号内并没有编译，而是被替换成类型int。
+sizeof不能用来操作未知存储大小的数据类型，未知内容的结构和联合类型,void类型。例如： sizeof(max);//int max() sizeof(char_v);//char char_v[MAX]，MAX未赋值 sizeof(void); 以上用法全都是错误的！！！ 以上用法全都是错误的！！！ 以上用法全都是错误的！！！
+sizeof的基本用法 上面的这些7788的东西，说出来没有什么依据，下面通过一些常用的用法来认识sizeof的用法： sizeof(char);/sizeof(signed char)/sizeof(unsigned char) sizeof(p);//int *p或者string *p或者char********* sizeof(a);//int a[10] sizeof(b);//char b[]=&#34;hello&#34;; 1和2的结果都是1,不管是什么类型，sizeof后的结果都是取决于操作系统的，在32位操作系统上面就是4，在64位上就是8,sizeof(a)在这里等价于数组长度乘以sizeof(int),换句话说：sizeof(a)=10*sizeof(int)。sizeof(b)等于6，原因是因为字符串后面一般都会有个”\0”，这个。。。预编译符会算进去的！！！！！
+int b[20]={3,4}; char c[2][3]={&#34;aa&#34;,&#34;bb&#34;}; sizeof(b);\\20*4 sizeof(c);\\6 以上的例子可以看的出来sizeof的值并不取决于赋值的情况，数组的大小取决于它在编译时被分配的空间，也就是各维度乘以数组元素的大小。
+函数的sizeof使用方法 sizeof并不能测量整个函数占用的内存大小！！！！而是测量数组返回值类型的大小。但是要在这期间注意不能对返回值类型为空或者仅仅对一个函数名求值，在函数有参数时，必须加上参数表！！！ 进阶用法 诡异的函数对齐问题 众所周知，C语言中存在这两种类型：struct和union，而在C&#43;&#43;中区别于c语言存在更复杂的class类型，而对这三种数据类型操作时，代码如下： struct sample { double a; char b; int c; } 对于刚开始入门的兄弟来说，sizeof(sample)=sizeof(double)&#43;sizeof(char)&#43;sizeof(int)。。。然而并不是这样子的，编译器对一些变量的起始地址做了“对齐”处理。在默认情况下，编译器规定各成员变量存放的起始地址相对于结构的起始地址的偏移量必须为该变量的类型所占用的字节数的倍数。在32位系统中，具体偏移方法如下：
+Char //偏移量必须为sizeof(char)即1的倍数 int //偏移量必须为sizeof(int)即4的倍数 float //偏移量必须为sizeof(float)即4的倍数 double //偏移量必须为sizeof(double)即8的倍数 Short //偏移量必须为sizeof(short)即2的倍数 结构体中的变量在申请空间时，是按照顺序来申请空间，并且按照上面所示的对齐方式来调整位置，并且按照上述要求填充空字节。这样子说跟没说一样，所以说个例子吧："/>
+
+
+
+  
+  <meta property="og:title" content="开源项目Tinyhttpd第二篇 详解sizeof关键字" />
+<meta property="og:description" content="Tinyhttpd 接上一篇文章，接下来我们要注意的关键字是sizeof。sizeof在我的印象里都是一个用来返回某个数据类型所占的内存，然而前段时间被人家问到了基本用法，都忘了。。。。所以写出来整理一下。 1.普通用法
+sizeof(type)/sizeof var_name sizeof是以字节形式给出了所操作数据的大小。前一种的格式都喜闻乐见，而后一种对我来说很少见，当用这种格式时主要是用来操作变量和对象，但是如果是操作一个类型必须要添加括号。但是由这里也可以看出来sizeof并不是函数！！！！因为一个正常的函数是需要加括号的。 而且sizeof也不是一种操作符！！！！，为什么这么说呢，可以看下面的例子： int a=0; cout&lt;&lt;sizeof(a=4)&lt;&lt;endl; cout&lt;&lt;a&lt;&lt;endl; 这段程序的输出结果为：
+4 0 在当初在其他大佬的博客上看到这段程序时，我发现这个东西真的好迷，因为我认为答案是4和3，后来把sizeof看作是一种编译预处理就想的过去了，因为显然在sizeof处理阶段显然括号内并没有编译，而是被替换成类型int。
+sizeof不能用来操作未知存储大小的数据类型，未知内容的结构和联合类型,void类型。例如： sizeof(max);//int max() sizeof(char_v);//char char_v[MAX]，MAX未赋值 sizeof(void); 以上用法全都是错误的！！！ 以上用法全都是错误的！！！ 以上用法全都是错误的！！！
+sizeof的基本用法 上面的这些7788的东西，说出来没有什么依据，下面通过一些常用的用法来认识sizeof的用法： sizeof(char);/sizeof(signed char)/sizeof(unsigned char) sizeof(p);//int *p或者string *p或者char********* sizeof(a);//int a[10] sizeof(b);//char b[]=&#34;hello&#34;; 1和2的结果都是1,不管是什么类型，sizeof后的结果都是取决于操作系统的，在32位操作系统上面就是4，在64位上就是8,sizeof(a)在这里等价于数组长度乘以sizeof(int),换句话说：sizeof(a)=10*sizeof(int)。sizeof(b)等于6，原因是因为字符串后面一般都会有个”\0”，这个。。。预编译符会算进去的！！！！！
+int b[20]={3,4}; char c[2][3]={&#34;aa&#34;,&#34;bb&#34;}; sizeof(b);\\20*4 sizeof(c);\\6 以上的例子可以看的出来sizeof的值并不取决于赋值的情况，数组的大小取决于它在编译时被分配的空间，也就是各维度乘以数组元素的大小。
+函数的sizeof使用方法 sizeof并不能测量整个函数占用的内存大小！！！！而是测量数组返回值类型的大小。但是要在这期间注意不能对返回值类型为空或者仅仅对一个函数名求值，在函数有参数时，必须加上参数表！！！ 进阶用法 诡异的函数对齐问题 众所周知，C语言中存在这两种类型：struct和union，而在C&#43;&#43;中区别于c语言存在更复杂的class类型，而对这三种数据类型操作时，代码如下： struct sample { double a; char b; int c; } 对于刚开始入门的兄弟来说，sizeof(sample)=sizeof(double)&#43;sizeof(char)&#43;sizeof(int)。。。然而并不是这样子的，编译器对一些变量的起始地址做了“对齐”处理。在默认情况下，编译器规定各成员变量存放的起始地址相对于结构的起始地址的偏移量必须为该变量的类型所占用的字节数的倍数。在32位系统中，具体偏移方法如下：
+Char //偏移量必须为sizeof(char)即1的倍数 int //偏移量必须为sizeof(int)即4的倍数 float //偏移量必须为sizeof(float)即4的倍数 double //偏移量必须为sizeof(double)即8的倍数 Short //偏移量必须为sizeof(short)即2的倍数 结构体中的变量在申请空间时，是按照顺序来申请空间，并且按照上面所示的对齐方式来调整位置，并且按照上述要求填充空字节。这样子说跟没说一样，所以说个例子吧：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%BA%8C%E7%AF%87-%E8%AF%A6%E8%A7%A3sizeof%E5%85%B3%E9%94%AE%E5%AD%97/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-05-19T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "开源项目Tinyhttpd第二篇 详解sizeof关键字",
+        "headline": "开源项目Tinyhttpd第二篇 详解sizeof关键字",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Tinyhttpd 接上一篇文章，接下来我们要注意的关键字是sizeof。sizeof在我的印象里都是一个用来返回某个数据类型所占的内存，然而前段时间被人家问到了基本用法，都忘了。。。。所以写出来整理一下。 1.普通用法\nsizeof(type)\/sizeof var_name sizeof是以字节形式给出了所操作数据的大小。前一种的格式都喜闻乐见，而后一种对我来说很少见，当用这种格式时主要是用来操作变量和对象，但是如果是操作一个类型必须要添加括号。但是由这里也可以看出来sizeof并不是函数！！！！因为一个正常的函数是需要加括号的。 而且sizeof也不是一种操作符！！！！，为什么这么说呢，可以看下面的例子： int a=0; cout\u0026lt;\u0026lt;sizeof(a=4)\u0026lt;\u0026lt;endl; cout\u0026lt;\u0026lt;a\u0026lt;\u0026lt;endl; 这段程序的输出结果为：\n4 0 在当初在其他大佬的博客上看到这段程序时，我发现这个东西真的好迷，因为我认为答案是4和3，后来把sizeof看作是一种编译预处理就想的过去了，因为显然在sizeof处理阶段显然括号内并没有编译，而是被替换成类型int。\nsizeof不能用来操作未知存储大小的数据类型，未知内容的结构和联合类型,void类型。例如： sizeof(max);\/\/int max() sizeof(char_v);\/\/char char_v[MAX]，MAX未赋值 sizeof(void); 以上用法全都是错误的！！！ 以上用法全都是错误的！！！ 以上用法全都是错误的！！！\nsizeof的基本用法 上面的这些7788的东西，说出来没有什么依据，下面通过一些常用的用法来认识sizeof的用法： sizeof(char);\/sizeof(signed char)\/sizeof(unsigned char) sizeof(p);\/\/int *p或者string *p或者char********* sizeof(a);\/\/int a[10] sizeof(b);\/\/char b[]=\u0026#34;hello\u0026#34;; 1和2的结果都是1,不管是什么类型，sizeof后的结果都是取决于操作系统的，在32位操作系统上面就是4，在64位上就是8,sizeof(a)在这里等价于数组长度乘以sizeof(int),换句话说：sizeof(a)=10*sizeof(int)。sizeof(b)等于6，原因是因为字符串后面一般都会有个”\\0”，这个。。。预编译符会算进去的！！！！！\nint b[20]={3,4}; char c[2][3]={\u0026#34;aa\u0026#34;,\u0026#34;bb\u0026#34;}; sizeof(b);\\\\20*4 sizeof(c);\\\\6 以上的例子可以看的出来sizeof的值并不取决于赋值的情况，数组的大小取决于它在编译时被分配的空间，也就是各维度乘以数组元素的大小。\n函数的sizeof使用方法 sizeof并不能测量整个函数占用的内存大小！！！！而是测量数组返回值类型的大小。但是要在这期间注意不能对返回值类型为空或者仅仅对一个函数名求值，在函数有参数时，必须加上参数表！！！ 进阶用法 诡异的函数对齐问题 众所周知，C语言中存在这两种类型：struct和union，而在C\u002b\u002b中区别于c语言存在更复杂的class类型，而对这三种数据类型操作时，代码如下： struct sample { double a; char b; int c; } 对于刚开始入门的兄弟来说，sizeof(sample)=sizeof(double)\u002bsizeof(char)\u002bsizeof(int)。。。然而并不是这样子的，编译器对一些变量的起始地址做了“对齐”处理。在默认情况下，编译器规定各成员变量存放的起始地址相对于结构的起始地址的偏移量必须为该变量的类型所占用的字节数的倍数。在32位系统中，具体偏移方法如下：\nChar \/\/偏移量必须为sizeof(char)即1的倍数 int \/\/偏移量必须为sizeof(int)即4的倍数 float \/\/偏移量必须为sizeof(float)即4的倍数 double \/\/偏移量必须为sizeof(double)即8的倍数 Short \/\/偏移量必须为sizeof(short)即2的倍数 结构体中的变量在申请空间时，是按照顺序来申请空间，并且按照上面所示的对齐方式来调整位置，并且按照上述要求填充空字节。这样子说跟没说一样，所以说个例子吧：
+
+
+      
+
+
+    ",
+        "inLanguage": "en-us",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%BA%8C%E7%AF%87-%E8%AF%A6%E8%A7%A3sizeof%E5%85%B3%E9%94%AE%E5%AD%97\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Junshuo Li"
+        },
+        "copyrightYear" : "2020",
+        "dateCreated": "2020-05-19T00:00:00.00Z",
+        "datePublished": "2020-05-19T00:00:00.00Z",
+        "dateModified": "2020-05-19T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Junshuo Li",
+            "url": "https://www.lijunshuo.com/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.lijunshuo.com\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEtinyhttpd%E7%AC%AC%E4%BA%8C%E7%AF%87-%E8%AF%A6%E8%A7%A3sizeof%E5%85%B3%E9%94%AE%E5%AD%97\/",
+        "wordCount" : "72",
+        "genre" : [ ],
+        "keywords" : [ ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    animated fadeInDown
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/profile.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Junshuo&#39;s Blog</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Talk is fucking cheap. Show me the code.</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/Walter-Lea"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Github"
+            title="Github"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    animated fadeInDown
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      animated fadeInDown
+    "
+  >
+    
+    <div class="post__content">
+      <h1>开源项目Tinyhttpd第二篇 详解sizeof关键字</h1>
+      <p><a href="https://github.com/ezlippi/tinyhttpd">Tinyhttpd</a>
+接上一篇文章，接下来我们要注意的关键字是sizeof。sizeof在我的印象里都是一个用来返回某个数据类型所占的内存，然而前段时间被人家问到了基本用法，都忘了。。。。所以写出来整理一下。<!-- raw HTML omitted -->
+1.普通用法</p>
+<ul>
+<li>sizeof(type)/sizeof var_name<!-- raw HTML omitted -->
+sizeof是以字节形式给出了所操作数据的大小。前一种的格式都喜闻乐见，而后一种对我来说很少见，当用这种格式时主要是用来操作变量和对象，但是如果是操作一个类型必须要添加括号。但是由这里也可以看出来sizeof并不是函数！！！！因为一个正常的函数是需要加括号的。 而且sizeof也不是一种操作符！！！！，为什么这么说呢，可以看下面的例子：<!-- raw HTML omitted --></li>
+</ul>
+<pre tabindex="0"><code>int a=0;
+cout&lt;&lt;sizeof(a=4)&lt;&lt;endl;
+cout&lt;&lt;a&lt;&lt;endl;
+</code></pre><p>这段程序的输出结果为：</p>
+<pre tabindex="0"><code>4
+0
+</code></pre><p>在当初在其他大佬的博客上看到这段程序时，我发现这个东西真的好迷，因为我认为答案是4和3，后来把sizeof看作是一种编译预处理就想的过去了，因为显然在sizeof处理阶段显然括号内并没有编译，而是被替换成类型int。<!-- raw HTML omitted --></p>
+<ul>
+<li>sizeof不能用来操作未知存储大小的数据类型，未知内容的结构和联合类型,void类型。例如：<!-- raw HTML omitted --></li>
+</ul>
+<pre tabindex="0"><code>sizeof(max);//int max()
+sizeof(char_v);//char char_v[MAX]，MAX未赋值
+sizeof(void);
+</code></pre><p>以上用法全都是错误的！！！<!-- raw HTML omitted -->
+以上用法全都是错误的！！！<!-- raw HTML omitted -->
+以上用法全都是错误的！！！<!-- raw HTML omitted --></p>
+<ul>
+<li>sizeof的基本用法<!-- raw HTML omitted -->
+上面的这些7788的东西，说出来没有什么依据，下面通过一些常用的用法来认识sizeof的用法：</li>
+</ul>
+<pre tabindex="0"><code>sizeof(char);/sizeof(signed char)/sizeof(unsigned char)
+sizeof(p);//int *p或者string *p或者char*********
+sizeof(a);//int a[10]
+sizeof(b);//char b[]=&#34;hello&#34;;
+</code></pre><p>1和2的结果都是1,不管是什么类型，sizeof后的结果都是取决于操作系统的，在32位操作系统上面就是4，在64位上就是8,sizeof(a)在这里等价于数组长度乘以sizeof(int),换句话说：sizeof(a)=10*sizeof(int)。sizeof(b)等于6，原因是因为字符串后面一般都会有个”\0”，这个。。。预编译符会算进去的！！！！！</p>
+<pre tabindex="0"><code>int b[20]={3,4};
+char c[2][3]={&#34;aa&#34;,&#34;bb&#34;};
+sizeof(b);\\20*4
+sizeof(c);\\6
+</code></pre><p>以上的例子可以看的出来sizeof的值并不取决于赋值的情况，数组的大小取决于它在编译时被分配的空间，也就是各维度乘以数组元素的大小。</p>
+<ul>
+<li>函数的sizeof使用方法<!-- raw HTML omitted -->
+sizeof并不能测量整个函数占用的内存大小！！！！而是测量数组返回值类型的大小。但是要在这期间注意不能对返回值类型为空或者仅仅对一个函数名求值，在函数有参数时，必须加上参数表！！！</li>
+</ul>
+<ol>
+<li>进阶用法 诡异的函数对齐问题<!-- raw HTML omitted -->
+众所周知，C语言中存在这两种类型：struct和union，而在C++中区别于c语言存在更复杂的class类型，而对这三种数据类型操作时，代码如下：</li>
+</ol>
+<pre tabindex="0"><code>struct sample
+{
+    double a;
+    char b;
+    int c;
+}
+</code></pre><p>对于刚开始入门的兄弟来说，sizeof(sample)=sizeof(double)+sizeof(char)+sizeof(int)。。。然而并不是这样子的，编译器对一些变量的起始地址做了“对齐”处理。在默认情况下，编译器规定各成员变量存放的起始地址相对于结构的起始地址的偏移量必须为该变量的类型所占用的字节数的倍数。在32位系统中，具体偏移方法如下：<!-- raw HTML omitted --></p>
+<pre tabindex="0"><code>Char  //偏移量必须为sizeof(char)即1的倍数  
+int  //偏移量必须为sizeof(int)即4的倍数  
+float  //偏移量必须为sizeof(float)即4的倍数  
+double  //偏移量必须为sizeof(double)即8的倍数  
+Short  //偏移量必须为sizeof(short)即2的倍数
+</code></pre><p>结构体中的变量在申请空间时，是按照顺序来申请空间，并且按照上面所示的对齐方式来调整位置，并且按照上述要求填充空字节。这样子说跟没说一样，所以说个例子吧：<!-- raw HTML omitted --></p>
+<ul>
+<li>当为上面的sample结构体分配空间时，肯定是先为double类型变量分配内存，他的起始地址和结构体的起始地址相同，偏移量0（正好为sizeof（double）的倍数），它占的内存为8字节这个就不用说了；然后为第二个char类型变量分配内存，可以为它分配的地址相对于结构的偏移地址为8，满足对齐方式可以分配，它占的内存为1个字节，完美！！！！；然后为第三个int类型变量分配内存，下一个可以分配的地址对于结构的偏移量为9，不是sizeof（int）的倍数，为了满足上述对偏移量balabala的诡异约束问题，编译器会填充三个空字节。。。使得下一个可分配地址对于结构原始地址偏移为12，满足要求，分配内存，完美！！！！！所以占用的空间大小为：8+1+3+4=16字节。（这个东西我记得在19年12月份我考浙江大学的计算机系时。。。408考试里考过，当时真的搞不懂，现在终于搞懂了，开心！！！！！！）</li>
+</ul>
+</div>
+    <div class="post__footer">
+      
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Junshuo Li
+        2023
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  <script async defer src=" https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" /></noscript>
+
+</body>
+</html>
