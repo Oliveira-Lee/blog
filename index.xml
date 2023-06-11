@@ -6,7 +6,20 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 24 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://www.lijunshuo.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 11 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://www.lijunshuo.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>面试对线记录18 从输入URL到页面展示发生了什么</title>
+      <link>https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9518/</link>
+      <pubDate>Sun, 11 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9518/</guid>
+      
+        <description>最近的话又开始跟面试官对线了，最近的话好像是行情不好，投了很多的简历，面试没有几个，正好刚面试完，遇到了这个问题，不会真好记录一下。
+总的过程大概是这样子的：
+输入地址 在输入地址的时候，chorme浏览器已经在开始从自己本地的缓存中寻找输入的字符串可能对应的url，智能补全地址，或者直接从本地缓存中直接网页load出来 查看域名的ip地址 浏览器会解析这个域名，一般先从本地硬盘hosts文件开始查找，如果没有的的话，就会发送一个DNS请求到本地DNS服务器，这个本地DNS服务器一般是由运营商提供，比如说中国电信，中国移动啥的，如果本地DNS服务器的缓存中·有这条记录，那么就直接返回结果，如果没有，就像DNS根服务器进行查询，（递归过程），如果连根DNS服务器都没有的话，那么就会告诉本地DNS服务器，让他去域服务器上面去查询，并且给出域服务器的地址； 接下来本地DNS服务器就会向域服务器发送请求，比如。com 。org的域服务器，域服务器收到请求后，会告诉域名的解析服务器的地址； 最后的话，本地DNS服务器向域名的解析服务器发送请求，这样子就会收到一个域名和ip地址的对应关系，本地DNS服务器会把ip地址返回给用户，然后将这个对应关系保存到缓存中。 建立tcp连接 从上一步我们拿到对应的ip地址了，浏览器会用一个随机端口向服务器web程序80端口发起tcp连接请求，这个请求到达服务器端口，进入网卡，进入tcpip的协议栈，最后到达web程序，最终建立tcpip连接； 根据状态码处理请求 如果服务器会给浏览器响应一个301永久重定向响应，这样子浏览器就会重定向到www.google.com， 浏览器跟踪重定向地址，因为上一步浏览器重定向了一个新的地址，所以会发送一个新的http请求； 如果服务器返回一个200正常响应，，首先请求会先把你的请求发送到反向代理服务器中，比如nginx，nginx再请求应用服务器，应用服务器再将结果返回给客户端 服务器返回一个http响应 服务器会返回三部分：状态行，响应头，响应正文 浏览器显示html </description>
+      
+    </item>
+    
     <item>
       <title>Vue学习笔记一 基础学习</title>
       <link>https://www.lijunshuo.com/posts/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEruoyi%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/</link>

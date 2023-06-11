@@ -10,7 +10,7 @@
   <title>
     Junshuo Li
         |
-        CORS
+        面试对线记录18 从输入URL到页面展示发生了什么
       
 
     
@@ -18,7 +18,7 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.111.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.113.0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="author" content="Junshuo Li" />
   <meta
     name="description"
@@ -113,34 +113,22 @@
 
   
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="CORS"/>
-<meta name="twitter:description" content="这个概念的话在今天我面试的时候接触到了，但是我的话可能是因为我做的项目比较菜，所以这部分并没有接触到过，所以我今天仔细学习和记录在这里。 这个玩意说白了就是跨域资源共享，就是说我们平时在不刷新页面时更新网页，在页面加载后从服务器请求数据以及在页面加载后从服务器接受数据等需求的背后，其实都是AJAX技术在默默支持，他使用XMLHttpRequest对象从web服务器请求数据，but不仅仅局限于XML，也可以是纯文本或者JSON文本，但是哟！！！！只能是同源情况下，这就很尴尬了，所以的话就有了CORS这个技术点，他可以允许浏览器向跨源服务器发出XMLHttpRequest请求。
-这个技术需要浏览器和服务器支持，but现在浏览器都支持，除了老版本的ie浏览器，我都不想说微软就是个zz了。。。浏览器的话如果发现AJAX跨源，就会添加一些辅助措施来进行帮助请求，当然这种情况对用户来说是透明不感知的。
-在CORS的视角下，它把请求分成两种，简单请求和非简单请求，对这两种请求会采用不同的措施。
-比如简单请求就包括：HEAD，GET，POST，这几个请求如果跨域的话，就会在头信息中添加一个Origin字段，这个字段会记录该请求来自哪个源，Origin字段会包含协议，域名以及端口，服务器会根据这个值，来判断是否同意这个值。 在服务器拿到这个请求以后，如果Origin这个源不再服务器许可范围内，他就会返回一个正常的HTTP回应，；浏览器会检测这个回应的头信息的话会不会包含Access-Control-Allow-Origin字段，如果不包含，就会抛出一个错误，这种错误不会被状态码识别。
-如果Origin这个指定的域名在许可范围内，服务器返回的响应就会多出几个头信息字段
-Access-Control-Allow-Origin: http://api.xxxxx.com //这个字段是必须的 Access-Control-Allow-Credentials: true //可选，这个字段的值是bool类型，表示是否允许发送Cookie Access-Control-Expose-Headers: FooBar //这个字段置顶想拿到的字段的值 Content-Type: text/html; charset=utf-8 非简单请求中就包括PUT，DELETE以及Content-Type字段类型位application/json的请求，针对这些请求的跨域，浏览器会在正式通信之前增加一次HTTP查询请求，称为是“预检”请求； 浏览器会先查询服务器，当前页面所在的域名是否在服务器的许可名单之中，还有可以使用哪些HTTP动词以及头信息字段，只要得到肯定答复，就会发送正常的XMLHttpRequest请求，否则就会报错。
-预检请求的头信息我找了一个例子，大概就是这样子：
-OPTIONS /cors HTTP/1.1 Origin: http://api.bob.com Access-Control-Request-Method: PUT //必须字段 表示是个什么类型的请求 Access-Control-Request-Headers: X-Custom-Header //表示浏览器请求会额外发送的头信息字段 Host: api.alice.com Accept-Language: en-US Connection: keep-alive User-Agent: Mozilla/5.0... 大家可以看到请求方法就是OPTIONS，在这里表示这个请求就是用来询问的，头信息里，关键字段就是Origin，表示请求来自什么源。 服务器收到预检请求后，就会检查Origin和Access-Control-Request-Method以及Access-Control-Request-Headers等字段，确认允许跨源请求，就可以做出回应。
-HTTP/1.1 200 OK Date: Mon, 01 Dec 2008 01:15:39 GMT Server: Apache/2.0.61 (Unix) Access-Control-Allow-Origin: http://api.bob.com Access-Control-Allow-Methods: GET, POST, PUT Access-Control-Allow-Headers: X-Custom-Header Content-Type: text/html; charset=utf-8 Content-Encoding: gzip Content-Length: 0 Keep-Alive: timeout=2, max=100 Connection: Keep-Alive Content-Type: text/plain Access-Control-Allow-Origin字段如果为*表示同意任何跨源请求 如果服务器否定了这个预检请求，会返回一个正常的HTTP回应，但是不包含上面的CORS头信息字段，这个时候浏览器就会认定服务器不同意预检请求，所以会触发错误，控制台就会报错。 预检之后的请求，头信息如下："/>
+<meta name="twitter:title" content="面试对线记录18 从输入URL到页面展示发生了什么"/>
+<meta name="twitter:description" content="最近的话又开始跟面试官对线了，最近的话好像是行情不好，投了很多的简历，面试没有几个，正好刚面试完，遇到了这个问题，不会真好记录一下。
+总的过程大概是这样子的：
+输入地址 在输入地址的时候，chorme浏览器已经在开始从自己本地的缓存中寻找输入的字符串可能对应的url，智能补全地址，或者直接从本地缓存中直接网页load出来 查看域名的ip地址 浏览器会解析这个域名，一般先从本地硬盘hosts文件开始查找，如果没有的的话，就会发送一个DNS请求到本地DNS服务器，这个本地DNS服务器一般是由运营商提供，比如说中国电信，中国移动啥的，如果本地DNS服务器的缓存中·有这条记录，那么就直接返回结果，如果没有，就像DNS根服务器进行查询，（递归过程），如果连根DNS服务器都没有的话，那么就会告诉本地DNS服务器，让他去域服务器上面去查询，并且给出域服务器的地址； 接下来本地DNS服务器就会向域服务器发送请求，比如。com 。org的域服务器，域服务器收到请求后，会告诉域名的解析服务器的地址； 最后的话，本地DNS服务器向域名的解析服务器发送请求，这样子就会收到一个域名和ip地址的对应关系，本地DNS服务器会把ip地址返回给用户，然后将这个对应关系保存到缓存中。 建立tcp连接 从上一步我们拿到对应的ip地址了，浏览器会用一个随机端口向服务器web程序80端口发起tcp连接请求，这个请求到达服务器端口，进入网卡，进入tcpip的协议栈，最后到达web程序，最终建立tcpip连接； 根据状态码处理请求 如果服务器会给浏览器响应一个301永久重定向响应，这样子浏览器就会重定向到www.google.com， 浏览器跟踪重定向地址，因为上一步浏览器重定向了一个新的地址，所以会发送一个新的http请求； 如果服务器返回一个200正常响应，，首先请求会先把你的请求发送到反向代理服务器中，比如nginx，nginx再请求应用服务器，应用服务器再将结果返回给客户端 服务器返回一个http响应 服务器会返回三部分：状态行，响应头，响应正文 浏览器显示html "/>
 
 
 
   
-  <meta property="og:title" content="CORS" />
-<meta property="og:description" content="这个概念的话在今天我面试的时候接触到了，但是我的话可能是因为我做的项目比较菜，所以这部分并没有接触到过，所以我今天仔细学习和记录在这里。 这个玩意说白了就是跨域资源共享，就是说我们平时在不刷新页面时更新网页，在页面加载后从服务器请求数据以及在页面加载后从服务器接受数据等需求的背后，其实都是AJAX技术在默默支持，他使用XMLHttpRequest对象从web服务器请求数据，but不仅仅局限于XML，也可以是纯文本或者JSON文本，但是哟！！！！只能是同源情况下，这就很尴尬了，所以的话就有了CORS这个技术点，他可以允许浏览器向跨源服务器发出XMLHttpRequest请求。
-这个技术需要浏览器和服务器支持，but现在浏览器都支持，除了老版本的ie浏览器，我都不想说微软就是个zz了。。。浏览器的话如果发现AJAX跨源，就会添加一些辅助措施来进行帮助请求，当然这种情况对用户来说是透明不感知的。
-在CORS的视角下，它把请求分成两种，简单请求和非简单请求，对这两种请求会采用不同的措施。
-比如简单请求就包括：HEAD，GET，POST，这几个请求如果跨域的话，就会在头信息中添加一个Origin字段，这个字段会记录该请求来自哪个源，Origin字段会包含协议，域名以及端口，服务器会根据这个值，来判断是否同意这个值。 在服务器拿到这个请求以后，如果Origin这个源不再服务器许可范围内，他就会返回一个正常的HTTP回应，；浏览器会检测这个回应的头信息的话会不会包含Access-Control-Allow-Origin字段，如果不包含，就会抛出一个错误，这种错误不会被状态码识别。
-如果Origin这个指定的域名在许可范围内，服务器返回的响应就会多出几个头信息字段
-Access-Control-Allow-Origin: http://api.xxxxx.com //这个字段是必须的 Access-Control-Allow-Credentials: true //可选，这个字段的值是bool类型，表示是否允许发送Cookie Access-Control-Expose-Headers: FooBar //这个字段置顶想拿到的字段的值 Content-Type: text/html; charset=utf-8 非简单请求中就包括PUT，DELETE以及Content-Type字段类型位application/json的请求，针对这些请求的跨域，浏览器会在正式通信之前增加一次HTTP查询请求，称为是“预检”请求； 浏览器会先查询服务器，当前页面所在的域名是否在服务器的许可名单之中，还有可以使用哪些HTTP动词以及头信息字段，只要得到肯定答复，就会发送正常的XMLHttpRequest请求，否则就会报错。
-预检请求的头信息我找了一个例子，大概就是这样子：
-OPTIONS /cors HTTP/1.1 Origin: http://api.bob.com Access-Control-Request-Method: PUT //必须字段 表示是个什么类型的请求 Access-Control-Request-Headers: X-Custom-Header //表示浏览器请求会额外发送的头信息字段 Host: api.alice.com Accept-Language: en-US Connection: keep-alive User-Agent: Mozilla/5.0... 大家可以看到请求方法就是OPTIONS，在这里表示这个请求就是用来询问的，头信息里，关键字段就是Origin，表示请求来自什么源。 服务器收到预检请求后，就会检查Origin和Access-Control-Request-Method以及Access-Control-Request-Headers等字段，确认允许跨源请求，就可以做出回应。
-HTTP/1.1 200 OK Date: Mon, 01 Dec 2008 01:15:39 GMT Server: Apache/2.0.61 (Unix) Access-Control-Allow-Origin: http://api.bob.com Access-Control-Allow-Methods: GET, POST, PUT Access-Control-Allow-Headers: X-Custom-Header Content-Type: text/html; charset=utf-8 Content-Encoding: gzip Content-Length: 0 Keep-Alive: timeout=2, max=100 Connection: Keep-Alive Content-Type: text/plain Access-Control-Allow-Origin字段如果为*表示同意任何跨源请求 如果服务器否定了这个预检请求，会返回一个正常的HTTP回应，但是不包含上面的CORS头信息字段，这个时候浏览器就会认定服务器不同意预检请求，所以会触发错误，控制台就会报错。 预检之后的请求，头信息如下：" />
+  <meta property="og:title" content="面试对线记录18 从输入URL到页面展示发生了什么" />
+<meta property="og:description" content="最近的话又开始跟面试官对线了，最近的话好像是行情不好，投了很多的简历，面试没有几个，正好刚面试完，遇到了这个问题，不会真好记录一下。
+总的过程大概是这样子的：
+输入地址 在输入地址的时候，chorme浏览器已经在开始从自己本地的缓存中寻找输入的字符串可能对应的url，智能补全地址，或者直接从本地缓存中直接网页load出来 查看域名的ip地址 浏览器会解析这个域名，一般先从本地硬盘hosts文件开始查找，如果没有的的话，就会发送一个DNS请求到本地DNS服务器，这个本地DNS服务器一般是由运营商提供，比如说中国电信，中国移动啥的，如果本地DNS服务器的缓存中·有这条记录，那么就直接返回结果，如果没有，就像DNS根服务器进行查询，（递归过程），如果连根DNS服务器都没有的话，那么就会告诉本地DNS服务器，让他去域服务器上面去查询，并且给出域服务器的地址； 接下来本地DNS服务器就会向域服务器发送请求，比如。com 。org的域服务器，域服务器收到请求后，会告诉域名的解析服务器的地址； 最后的话，本地DNS服务器向域名的解析服务器发送请求，这样子就会收到一个域名和ip地址的对应关系，本地DNS服务器会把ip地址返回给用户，然后将这个对应关系保存到缓存中。 建立tcp连接 从上一步我们拿到对应的ip地址了，浏览器会用一个随机端口向服务器web程序80端口发起tcp连接请求，这个请求到达服务器端口，进入网卡，进入tcpip的协议栈，最后到达web程序，最终建立tcpip连接； 根据状态码处理请求 如果服务器会给浏览器响应一个301永久重定向响应，这样子浏览器就会重定向到www.google.com， 浏览器跟踪重定向地址，因为上一步浏览器重定向了一个新的地址，所以会发送一个新的http请求； 如果服务器返回一个200正常响应，，首先请求会先把你的请求发送到反向代理服务器中，比如nginx，nginx再请求应用服务器，应用服务器再将结果返回给客户端 服务器返回一个http响应 服务器会返回三部分：状态行，响应头，响应正文 浏览器显示html " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.lijunshuo.com/posts/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9518/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-12-20T00:00:00+00:00" />
-<meta property="article:modified_time" content="2021-12-20T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
+<meta property="article:published_time" content="2023-06-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-06-11T00:00:00+00:00" /><meta property="og:site_name" content="Junshuo&#39;s Blog" />
 
 
 
@@ -153,12 +141,12 @@ HTTP/1.1 200 OK Date: Mon, 01 Dec 2008 01:15:39 GMT Server: Apache/2.0.61 (Unix)
         "@context": "http://schema.org",
         "@type": "BlogPosting",
         "articleSection": "posts",
-        "name": "CORS",
-        "headline": "CORS",
+        "name": "面试对线记录18 从输入URL到页面展示发生了什么",
+        "headline": "面试对线记录18 从输入URL到页面展示发生了什么",
         "alternativeHeadline": "",
         "description": "
       
-        这个概念的话在今天我面试的时候接触到了，但是我的话可能是因为我做的项目比较菜，所以这部分并没有接触到过，所以我今天仔细学习和记录在这里。 这个玩意说白了就是跨域资源共享，就是说我们平时在不刷新页面时更新网页，在页面加载后从服务器请求数据以及在页面加载后从服务器接受数据等需求的背后，其实都是AJAX技术在默默支持，他使用XMLHttpRequest对象从web服务器请求数据，but不仅仅局限于XML，也可以是纯文本或者JSON文本，但是哟！！！！只能是同源情况下，这就很尴尬了，所以的话就有了CORS这个技术点，他可以允许浏览器向跨源服务器发出XMLHttpRequest请求。\n这个技术需要浏览器和服务器支持，but现在浏览器都支持，除了老版本的ie浏览器，我都不想说微软就是个zz了。。。浏览器的话如果发现AJAX跨源，就会添加一些辅助措施来进行帮助请求，当然这种情况对用户来说是透明不感知的。\n在CORS的视角下，它把请求分成两种，简单请求和非简单请求，对这两种请求会采用不同的措施。\n比如简单请求就包括：HEAD，GET，POST，这几个请求如果跨域的话，就会在头信息中添加一个Origin字段，这个字段会记录该请求来自哪个源，Origin字段会包含协议，域名以及端口，服务器会根据这个值，来判断是否同意这个值。 在服务器拿到这个请求以后，如果Origin这个源不再服务器许可范围内，他就会返回一个正常的HTTP回应，；浏览器会检测这个回应的头信息的话会不会包含Access-Control-Allow-Origin字段，如果不包含，就会抛出一个错误，这种错误不会被状态码识别。\n如果Origin这个指定的域名在许可范围内，服务器返回的响应就会多出几个头信息字段\nAccess-Control-Allow-Origin: http:\/\/api.xxxxx.com \/\/这个字段是必须的 Access-Control-Allow-Credentials: true \/\/可选，这个字段的值是bool类型，表示是否允许发送Cookie Access-Control-Expose-Headers: FooBar \/\/这个字段置顶想拿到的字段的值 Content-Type: text\/html; charset=utf-8 非简单请求中就包括PUT，DELETE以及Content-Type字段类型位application\/json的请求，针对这些请求的跨域，浏览器会在正式通信之前增加一次HTTP查询请求，称为是“预检”请求； 浏览器会先查询服务器，当前页面所在的域名是否在服务器的许可名单之中，还有可以使用哪些HTTP动词以及头信息字段，只要得到肯定答复，就会发送正常的XMLHttpRequest请求，否则就会报错。\n预检请求的头信息我找了一个例子，大概就是这样子：\nOPTIONS \/cors HTTP\/1.1 Origin: http:\/\/api.bob.com Access-Control-Request-Method: PUT \/\/必须字段 表示是个什么类型的请求 Access-Control-Request-Headers: X-Custom-Header \/\/表示浏览器请求会额外发送的头信息字段 Host: api.alice.com Accept-Language: en-US Connection: keep-alive User-Agent: Mozilla\/5.0... 大家可以看到请求方法就是OPTIONS，在这里表示这个请求就是用来询问的，头信息里，关键字段就是Origin，表示请求来自什么源。 服务器收到预检请求后，就会检查Origin和Access-Control-Request-Method以及Access-Control-Request-Headers等字段，确认允许跨源请求，就可以做出回应。\nHTTP\/1.1 200 OK Date: Mon, 01 Dec 2008 01:15:39 GMT Server: Apache\/2.0.61 (Unix) Access-Control-Allow-Origin: http:\/\/api.bob.com Access-Control-Allow-Methods: GET, POST, PUT Access-Control-Allow-Headers: X-Custom-Header Content-Type: text\/html; charset=utf-8 Content-Encoding: gzip Content-Length: 0 Keep-Alive: timeout=2, max=100 Connection: Keep-Alive Content-Type: text\/plain Access-Control-Allow-Origin字段如果为*表示同意任何跨源请求 如果服务器否定了这个预检请求，会返回一个正常的HTTP回应，但是不包含上面的CORS头信息字段，这个时候浏览器就会认定服务器不同意预检请求，所以会触发错误，控制台就会报错。 预检之后的请求，头信息如下：
+        最近的话又开始跟面试官对线了，最近的话好像是行情不好，投了很多的简历，面试没有几个，正好刚面试完，遇到了这个问题，不会真好记录一下。\n总的过程大概是这样子的：\n输入地址 在输入地址的时候，chorme浏览器已经在开始从自己本地的缓存中寻找输入的字符串可能对应的url，智能补全地址，或者直接从本地缓存中直接网页load出来 查看域名的ip地址 浏览器会解析这个域名，一般先从本地硬盘hosts文件开始查找，如果没有的的话，就会发送一个DNS请求到本地DNS服务器，这个本地DNS服务器一般是由运营商提供，比如说中国电信，中国移动啥的，如果本地DNS服务器的缓存中·有这条记录，那么就直接返回结果，如果没有，就像DNS根服务器进行查询，（递归过程），如果连根DNS服务器都没有的话，那么就会告诉本地DNS服务器，让他去域服务器上面去查询，并且给出域服务器的地址； 接下来本地DNS服务器就会向域服务器发送请求，比如。com 。org的域服务器，域服务器收到请求后，会告诉域名的解析服务器的地址； 最后的话，本地DNS服务器向域名的解析服务器发送请求，这样子就会收到一个域名和ip地址的对应关系，本地DNS服务器会把ip地址返回给用户，然后将这个对应关系保存到缓存中。 建立tcp连接 从上一步我们拿到对应的ip地址了，浏览器会用一个随机端口向服务器web程序80端口发起tcp连接请求，这个请求到达服务器端口，进入网卡，进入tcpip的协议栈，最后到达web程序，最终建立tcpip连接； 根据状态码处理请求 如果服务器会给浏览器响应一个301永久重定向响应，这样子浏览器就会重定向到www.google.com， 浏览器跟踪重定向地址，因为上一步浏览器重定向了一个新的地址，所以会发送一个新的http请求； 如果服务器返回一个200正常响应，，首先请求会先把你的请求发送到反向代理服务器中，比如nginx，nginx再请求应用服务器，应用服务器再将结果返回给客户端 服务器返回一个http响应 服务器会返回三部分：状态行，响应头，响应正文 浏览器显示html 
 
 
       
@@ -187,10 +175,10 @@ HTTP/1.1 200 OK Date: Mon, 01 Dec 2008 01:15:39 GMT Server: Apache/2.0.61 (Unix)
             "@type": "Person",
             "name": "Junshuo Li"
         },
-        "copyrightYear" : "2021",
-        "dateCreated": "2021-12-20T00:00:00.00Z",
-        "datePublished": "2021-12-20T00:00:00.00Z",
-        "dateModified": "2021-12-20T00:00:00.00Z",
+        "copyrightYear" : "2023",
+        "dateCreated": "2023-06-11T00:00:00.00Z",
+        "datePublished": "2023-06-11T00:00:00.00Z",
+        "dateModified": "2023-06-11T00:00:00.00Z",
         "publisher":{
             "@type":"Organization",
             "name": "Junshuo Li",
@@ -208,7 +196,7 @@ HTTP/1.1 200 OK Date: Mon, 01 Dec 2008 01:15:39 GMT Server: Apache/2.0.61 (Unix)
 
     ,
         "url" : "https:\/\/www.lijunshuo.com\/posts\/%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%9518\/",
-        "wordCount" : "97",
+        "wordCount" : "18",
         "genre" : [ ],
         "keywords" : [ ]
     }
@@ -331,54 +319,27 @@ if (!doNotTrack) {
   >
     
     <div class="post__content">
-      <h1>CORS</h1>
-      <p>这个概念的话在今天我面试的时候接触到了，但是我的话可能是因为我做的项目比较菜，所以这部分并没有接触到过，所以我今天仔细学习和记录在这里。
-这个玩意说白了就是跨域资源共享，就是说我们平时在不刷新页面时更新网页，在页面加载后从服务器请求数据以及在页面加载后从服务器接受数据等需求的背后，其实都是AJAX技术在默默支持，他使用XMLHttpRequest对象从web服务器请求数据，but不仅仅局限于XML，也可以是纯文本或者JSON文本，但是哟！！！！只能是同源情况下，这就很尴尬了，所以的话就有了CORS这个技术点，他可以允许浏览器向跨源服务器发出XMLHttpRequest请求。<br>
-这个技术需要浏览器和服务器支持，but现在浏览器都支持，除了老版本的ie浏览器，我都不想说微软就是个zz了。。。浏览器的话如果发现AJAX跨源，就会添加一些辅助措施来进行帮助请求，当然这种情况对用户来说是透明不感知的。<br>
-在CORS的视角下，它把请求分成两种，简单请求和非简单请求，对这两种请求会采用不同的措施。<br>
-比如简单请求就包括：HEAD，GET，POST，这几个请求如果跨域的话，就会在头信息中添加一个Origin字段，这个字段会记录该请求来自哪个源，Origin字段会包含协议，域名以及端口，服务器会根据这个值，来判断是否同意这个值。
-在服务器拿到这个请求以后，如果Origin这个源不再服务器许可范围内，他就会返回一个正常的HTTP回应，；浏览器会检测这个回应的头信息的话会不会包含Access-Control-Allow-Origin字段，如果不包含，就会抛出一个错误，这种错误不会被状态码识别。<br>
-如果Origin这个指定的域名在许可范围内，服务器返回的响应就会多出几个头信息字段</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Origin</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">:</span><span style="color:#75715e">//api.xxxxx.com //这个字段是必须的
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Credentials</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> <span style="color:#75715e">//可选，这个字段的值是bool类型，表示是否允许发送Cookie
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Expose</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Headers</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">FooBar</span> <span style="color:#75715e">//这个字段置顶想拿到的字段的值
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Content</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Type</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">text</span><span style="color:#f92672">/</span><span style="color:#a6e22e">html</span>; <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#a6e22e">utf</span><span style="color:#f92672">-</span><span style="color:#ae81ff">8</span>
-</span></span></code></pre></div><p>非简单请求中就包括PUT，DELETE以及Content-Type字段类型位application/json的请求，针对这些请求的跨域，浏览器会在正式通信之前增加一次HTTP查询请求，称为是“预检”请求；
-浏览器会先查询服务器，当前页面所在的域名是否在服务器的许可名单之中，还有可以使用哪些HTTP动词以及头信息字段，只要得到肯定答复，就会发送正常的XMLHttpRequest请求，否则就会报错。<br>
-预检请求的头信息我找了一个例子，大概就是这样子：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">OPTIONS</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">cors</span> <span style="color:#a6e22e">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Origin</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">:</span><span style="color:#75715e">//api.bob.com
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Request</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Method</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">PUT</span> <span style="color:#75715e">//必须字段 表示是个什么类型的请求
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Request</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Headers</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">X</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Custom</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Header</span> <span style="color:#75715e">//表示浏览器请求会额外发送的头信息字段
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Host</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">api</span>.<span style="color:#a6e22e">alice</span>.<span style="color:#a6e22e">com</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Accept</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Language</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">en</span><span style="color:#f92672">-</span><span style="color:#a6e22e">US</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Connection</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">keep</span><span style="color:#f92672">-</span><span style="color:#a6e22e">alive</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">User</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Agent</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Mozilla</span><span style="color:#f92672">/</span><span style="color:#ae81ff">5.0</span>...
-</span></span></code></pre></div><p>大家可以看到请求方法就是OPTIONS，在这里表示这个请求就是用来询问的，头信息里，关键字段就是Origin，表示请求来自什么源。
-服务器收到预检请求后，就会检查Origin和Access-Control-Request-Method以及Access-Control-Request-Headers等字段，确认允许跨源请求，就可以做出回应。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
-</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#a6e22e">Mon</span>, <span style="color:#ae81ff">01</span> <span style="color:#a6e22e">Dec</span> <span style="color:#ae81ff">2008</span> <span style="color:#ae81ff">01</span><span style="color:#f92672">:</span><span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">39</span> <span style="color:#a6e22e">GMT</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Server</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Apache</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span>.<span style="color:#ae81ff">61</span> (<span style="color:#a6e22e">Unix</span>)
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Origin</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">:</span><span style="color:#75715e">//api.bob.com
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Methods</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">GET</span>, <span style="color:#a6e22e">POST</span>, <span style="color:#a6e22e">PUT</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Headers</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">X</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Custom</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Header</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Content</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Type</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">text</span><span style="color:#f92672">/</span><span style="color:#a6e22e">html</span>; <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#a6e22e">utf</span><span style="color:#f92672">-</span><span style="color:#ae81ff">8</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Content</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Encoding</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">gzip</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Content</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Length</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Keep</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Alive</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">timeout</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, <span style="color:#a6e22e">max</span><span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Connection</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Keep</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Alive</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Content</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Type</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">text</span><span style="color:#f92672">/</span><span style="color:#a6e22e">plain</span>
-</span></span></code></pre></div><p>Access-Control-Allow-Origin字段如果为*表示同意任何跨源请求
-如果服务器否定了这个预检请求，会返回一个正常的HTTP回应，但是不包含上面的CORS头信息字段，这个时候浏览器就会认定服务器不同意预检请求，所以会触发错误，控制台就会报错。
-预检之后的请求，头信息如下：</p>
-<pre tabindex="0"><code>PUT /cors HTTP/1.1
-Origin: http://api.bob.com
-Host: api.alice.com
-X-Custom-Header: value
-Accept-Language: en-US
-Connection: keep-alive
-User-Agent: Mozilla/5.0...
-</code></pre></div>
+      <h1>面试对线记录18 从输入URL到页面展示发生了什么</h1>
+      <p>最近的话又开始跟面试官对线了，最近的话好像是行情不好，投了很多的简历，面试没有几个，正好刚面试完，遇到了这个问题，不会真好记录一下。</p>
+<p>总的过程大概是这样子的：</p>
+<ol>
+<li>输入地址<!-- raw HTML omitted -->
+在输入地址的时候，chorme浏览器已经在开始从自己本地的缓存中寻找输入的字符串可能对应的url，智能补全地址，或者直接从本地缓存中直接网页load出来</li>
+<li>查看域名的ip地址<!-- raw HTML omitted -->
+浏览器会解析这个域名，一般先从本地硬盘hosts文件开始查找，如果没有的的话，就会发送一个DNS请求到本地DNS服务器，这个本地DNS服务器一般是由运营商提供，比如说中国电信，中国移动啥的，如果本地DNS服务器的缓存中·有这条记录，那么就直接返回结果，如果没有，就像DNS根服务器进行查询，（递归过程），如果连根DNS服务器都没有的话，那么就会告诉本地DNS服务器，让他去域服务器上面去查询，并且给出域服务器的地址；
+接下来本地DNS服务器就会向域服务器发送请求，比如。com 。org的域服务器，域服务器收到请求后，会告诉域名的解析服务器的地址；
+最后的话，本地DNS服务器向域名的解析服务器发送请求，这样子就会收到一个域名和ip地址的对应关系，本地DNS服务器会把ip地址返回给用户，然后将这个对应关系保存到缓存中。</li>
+<li>建立tcp连接<!-- raw HTML omitted -->
+从上一步我们拿到对应的ip地址了，浏览器会用一个随机端口向服务器web程序80端口发起tcp连接请求，这个请求到达服务器端口，进入网卡，进入tcpip的协议栈，最后到达web程序，最终建立tcpip连接；</li>
+<li>根据状态码处理请求<!-- raw HTML omitted -->
+如果服务器会给浏览器响应一个301永久重定向响应，这样子浏览器就会重定向到www.google.com，
+浏览器跟踪重定向地址，因为上一步浏览器重定向了一个新的地址，所以会发送一个新的http请求；
+如果服务器返回一个200正常响应，，首先请求会先把你的请求发送到反向代理服务器中，比如nginx，nginx再请求应用服务器，应用服务器再将结果返回给客户端</li>
+<li>服务器返回一个http响应
+服务器会返回三部分：状态行，响应头，响应正文</li>
+<li>浏览器显示html</li>
+</ol>
+</div>
     <div class="post__footer">
       
 
